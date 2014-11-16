@@ -14,12 +14,12 @@ public:
   Pen();
 
   void apply(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  
+
   double getWidth();
   void setWidth(double width);
-  
+
   Color& getColor();
-  
+
 private:
   Glib::Property<double> prop_width;
   Color color;

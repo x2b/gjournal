@@ -11,9 +11,9 @@ public:
   Color();
   Color(int c);
   Color(uchar r, uchar g, uchar b, uchar a=0xff);
-  
+
   void apply(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  
+
 private:
   uchar r, g, b, a;
 };

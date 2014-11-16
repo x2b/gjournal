@@ -14,7 +14,7 @@ public:
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
 private:
-  
+
   std::list<std::shared_ptr<Element>> elements;
 };
 

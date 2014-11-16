@@ -17,13 +17,13 @@ public:
 
   virtual void draw(const Cairo::RefPtr<Cairo::Context>& cr) const override;
   virtual Rectangle boundingRect() const override;
-  
+
   virtual void move(Gdk::Point& offset) override;
   virtual void scale(Gdk::Point& src, double dx, double dy) override;
-  
+
   PointList& getPoints();
   const PointList& getPoints() const;
-  
+
 private:
   Pen pen;
   PointList points;

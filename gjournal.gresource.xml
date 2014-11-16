@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+<gresource prefix="/org/gnome/gjournal">
+<!--
+<file preprocess="to-pixdata">assets/slider.png</file>
+<file>apps/nautilus.css</file>
+<file>gtk-main.css</file>
+<file>gtk-main-dark.css</file>
+<file>gtk-widgets.css</file>
+-->
+
+<file>ui/main_window.ui</file>
+
+</gresource>
+</gresources>

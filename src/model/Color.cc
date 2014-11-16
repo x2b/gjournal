@@ -12,7 +12,7 @@ Color::Color(int c)
     b(c & 0xff),
     a(0xff)
 {
-  
+
 }
 
 Color::Color(uchar r, uchar g, uchar b, uchar a)

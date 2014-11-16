@@ -23,25 +23,25 @@ public:
     NONE, LINED, RULED, GRAPH
   };
 
-  double getWidth() const;
-  double getHeight() const;
-  int getNumber() const;
-  
-  void setNumber(int number);
-  
-  void setBackgroundType(BackgroundType _bg_type);
+  double get_width() const;
+  double get_height() const;
+  int get_number() const;
+
+  void set_number(int number);
+
+  void set_background_type(BackgroundType _bg_type);
 
 private:
 
-  void drawBackground(const Cairo::RefPtr<Cairo::Context>& cr) const;
+  void draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
-  void drawBackgroundRuled(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  void drawBackgroundLined(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  void drawBackgroundGraph(const Cairo::RefPtr<Cairo::Context>& cr) const;
+  void draw_background_ruled(const Cairo::RefPtr<Cairo::Context>& cr) const;
+  void draw_background_lined(const Cairo::RefPtr<Cairo::Context>& cr) const;
+  void draw_background_graph(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
   double width, height;
   int number;
-  
+
   BackgroundType bg_type;
 
   std::list<std::shared_ptr<Layer>> layers;

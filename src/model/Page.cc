@@ -18,7 +18,7 @@ Page::Page(double width, double height, int number)
 
 void Page::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
-  drawBackground(cr);
+  draw_background(cr);
 
   for(auto layer : layers)
   {
@@ -26,92 +26,92 @@ void Page::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
   }
 }
 
-double Page::getWidth() const
+double Page::get_width() const
 {
   return width;
 }
 
-double Page::getHeight() const
+double Page::get_height() const
 {
   return height;
 }
 
-int Page::getNumber() const
+int Page::get_number() const
 {
   return number;
 }
 
-void Page::setNumber(int _number)
+void Page::set_number(int _number)
 {
   number = _number;
 }
 
-void Page::setBackgroundType(BackgroundType _bg_type)
+void Page::set_background_type(BackgroundType _bg_type)
 {
   bg_type = _bg_type;
 }
 
-void Page::drawBackground(const Cairo::RefPtr<Cairo::Context>& cr) const
+void Page::draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   backColor.apply(cr);
   cr->paint();
-  
+
   switch(bg_type)
   {
     case NONE:
       break;
     case LINED:
-      drawBackgroundLined(cr);
+      draw_background_lined(cr);
     case RULED:
-      drawBackgroundRuled(cr);
+      draw_background_ruled(cr);
       break;
     case GRAPH:
-      drawBackgroundGraph(cr);
+      draw_background_graph(cr);
       break;
   }
 }
 
-void Page::drawBackgroundRuled(const Cairo::RefPtr<Cairo::Context>& cr) const
+void Page::draw_background_ruled(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   rulerColor.apply(cr);
 
   cr->set_line_width(0.5);
 
-  for(double y = 80; y < getHeight(); y += rulingSize)
+  for(double y = 80; y < get_height(); y += rulingSize)
   {
     cr->move_to(0, y);
-    cr->line_to(getWidth(), y);
+    cr->line_to(get_width(), y);
   }
-  
+
   cr->stroke();
 }
 
-void Page::drawBackgroundLined(const Cairo::RefPtr<Cairo::Context>& cr) const
+void Page::draw_background_lined(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   lineColor.apply(cr);
-  
+
   cr->set_line_width(0.5);
   cr->move_to(72, 0);
-  cr->line_to(72, getHeight());
+  cr->line_to(72, get_height());
   cr->stroke();
 }
 
-void Page::drawBackgroundGraph(const Cairo::RefPtr<Cairo::Context>& cr) const
+void Page::draw_background_graph(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   rulerColor.apply(cr);
   cr->set_line_width(0.5);
 
-  for(double x = graphSize; x < getWidth(); x += graphSize)
+  for(double x = graphSize; x < get_width(); x += graphSize)
   {
     cr->move_to(x, 0);
-    cr->line_to(x, getHeight());
+    cr->line_to(x, get_height());
   }
-  
-  for(double y = graphSize; y < getHeight(); y += graphSize)
+
+  for(double y = graphSize; y < get_height(); y += graphSize)
   {
     cr->move_to(0, y);
-    cr->line_to(getWidth(), y);
+    cr->line_to(get_width(), y);
   }
-  
+
   cr->stroke();
 }

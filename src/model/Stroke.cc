@@ -4,12 +4,12 @@
 void Stroke::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   pen.apply(cr);
-  
+
   if(points.empty())
     return;
-  
+
   bool first = true;
-  
+
   for(const Gdk::Point& point : getPoints())
   {
     if(first)
@@ -22,7 +22,7 @@ void Stroke::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
       cr->line_to(point.get_x(), point.get_y());
     }
   }
-  
+
 }
 
 Rectangle Stroke::boundingRect() const
@@ -43,12 +43,12 @@ void Stroke::scale(Gdk::Point& src, double dx, double dy)
 {
   double ox = src.get_x(),
          oy = src.get_y();
-  
+
   for(Gdk::Point& point : getPoints())
   {
     double x = point.get_x(),
            y = point.get_y();
-    
+
     point.set_x(x + dx * (point.get_x() - ox));
     point.set_y(y + dy * (point.get_y() - oy));
   }
