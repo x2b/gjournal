@@ -18,6 +18,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkVBox" id="zoom">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToggleButton" id="search">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>

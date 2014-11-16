@@ -6,6 +6,7 @@ gjournal_SOURCES = \
 	gui/MainWindow.cc \
 	gui/PageLayout.cc \
 	gui/PageWidget.cc \
+	gui/ZoomHandler.cc \
 	model/Color.cc \
 	model/Document.cc \
 	model/Element.cc \

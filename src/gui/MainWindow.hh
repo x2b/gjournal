@@ -6,6 +6,8 @@
 
 #include "model/Document.hh"
 
+#include "gui/ZoomHandler.hh"
+
 namespace Gtk
 {
   class Stack;
@@ -24,6 +26,7 @@ public:
 private:
   Glib::RefPtr<Gtk::Builder> builder;
   Gtk::Stack* stack;
+  ZoomHandler* handler;
 };
 
 #endif

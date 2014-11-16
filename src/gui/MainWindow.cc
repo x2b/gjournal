@@ -10,11 +10,14 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
                        const Glib::RefPtr<Gtk::Builder>& refBuilder)
   : Gtk::Window(cobject),
     builder(refBuilder),
-    stack(nullptr)
+    stack(nullptr),
+    handler(nullptr)
 {
   LOG(DEBUG) << "Created main window" << endl;
 
   refBuilder->get_widget("stack", stack);
+
+  refBuilder->get_widget_derived("zoom", handler);
 }
 
 void MainWindow::add_document(DocumentRef doc)
