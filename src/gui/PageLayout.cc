@@ -147,7 +147,7 @@ void PageLayout::get_preferred_width_vfunc(int& minimum_width, int& natural_widt
   minimum_width += margin;
   natural_width += margin;
 
-  LOG(DEBUG) << "get_preferred_width_vfunc returns " << minimum_width << endl;
+  LOG(DEBUG) << "PageLayout::get_preferred_width_vfunc returns " << minimum_width;
 }
 
 void PageLayout::get_preferred_height_vfunc(int& minimum_height, int& natural_height) const
@@ -185,10 +185,10 @@ void PageLayout::get_preferred_height_vfunc(int& minimum_height, int& natural_he
   minimum_height += margin;
   natural_height += margin;
 
-  LOG(DEBUG) << "get_preferred_height_vfunc returns "
+  LOG(DEBUG) << "PageLayout::get_preferred_height_vfunc returns "
              << minimum_height
              << " for a total of children: "
-             << get_children().size() << endl;
+             << get_children().size();
 }
 
 void PageLayout::get_preferred_height_dual(int& minimum_height, int& natural_height) const

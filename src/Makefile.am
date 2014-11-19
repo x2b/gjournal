@@ -2,6 +2,7 @@ bin_PROGRAMS = gjournal
 
 gjournal_SOURCES = \
 	main.cc \
+	gui/Application.cc \
 	gui/JournalWidget.cc \
 	gui/MainWindow.cc \
 	gui/PageLayout.cc \
@@ -28,8 +29,8 @@ BUILT_SOURCES = \
 CLEANFILES = \
 	$(RESOURCE_SRC)
 
-$(RESOURCE_SRC): $(abs_top_srcdir)/gjournal.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(abs_top_src_dir) $(abs_top_src_dir)/gjournal.gresource.xml)
-	$(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(abs_top_srcdir) --generate-source --c-name gj $<
+$(RESOURCE_SRC): $(abs_top_srcdir)/gjournal.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=$(abs_top_srcdir) $(abs_top_srcdir)/gjournal.gresource.xml)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(abs_top_srcdir) --generate-source --c-name=gj $<
 
 gjournal_CFLAGS= @PACKAGE_CC_CFLAGS@
 gjournal_CXXFLAGS = @PACKAGE_CPP_CFLAGS@

@@ -13,9 +13,6 @@ PageWidget::PageWidget(PageRef page)
 bool PageWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   page->draw(cr);
-
-  auto alloc = get_allocation();
-
   return true;
 }
 

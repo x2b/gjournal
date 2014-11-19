@@ -9,13 +9,29 @@ Log::Log()
 
 std::ostringstream& Log::get(LogLevel level)
 {
+  os << " " << to_string(level) << ": ";
+
   /*
   os << "- " << NowTime();
-  os << " " << ToString(level) << ": ";
   os << std::string(level > logDEBUG ? 0 : level - logDEBUG, '\t');
   */
   message_level = level;
   return os;
+}
+
+std::string Log::to_string(LogLevel level)
+{
+  switch(level)
+  {
+    case ERROR:
+      return "Error";
+    case WARNING:
+      return "Warning";
+    case INFO:
+      return "Info";
+    case DEBUG:
+      return "Debug";
+  }
 }
 
 LogLevel Log::reporting_level()

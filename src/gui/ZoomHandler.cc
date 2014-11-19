@@ -1,8 +1,12 @@
 #include "ZoomHandler.hh"
 
 #include <functional>
+#include <iostream>
 #include <string>
 #include <vector>
+
+#include "gui/MainWindow.hh"
+#include "util/Log.hh"
 
 struct ZoomLevel
 {
@@ -25,11 +29,12 @@ const std::vector<ZoomLevel> levels({ZoomLevel("50%", 0.5),
                                      ZoomLevel("200%", 2.0)});
 
 ZoomHandler::ZoomHandler(BaseObjectType* cobject,
-                         const Glib::RefPtr<Gtk::Builder>& refBuilder)
+                         const Glib::RefPtr<Gtk::Builder>& ref_builder)
   : Gtk::VBox(cobject),
     menu(Gio::Menu::create()),
     entry(),
-    popover(*this)
+    popover(*this),
+    builder(ref_builder)
 {
   using namespace std::placeholders;
 
@@ -41,10 +46,8 @@ ZoomHandler::ZoomHandler(BaseObjectType* cobject,
   entry.signal_icon_press().connect(std::bind(&ZoomHandler::on_icon_pressed,
                                               this, _1, _2));
 
-  entry.signal_activate().connect(std::bind(&ZoomHandler::on_activated,
+  entry.signal_activate().connect(std::bind(&ZoomHandler::on_entry_activated,
                                             this));
-
-  create_levels();
 
   popover.bind_model(menu);
 }
@@ -52,24 +55,84 @@ ZoomHandler::ZoomHandler(BaseObjectType* cobject,
 void ZoomHandler::on_icon_pressed(Gtk::EntryIconPosition pos,
                                   const GdkEventButton* button)
 {
+  popover.set_pointing_to(entry.get_icon_area(Gtk::ENTRY_ICON_SECONDARY));
+
+  popover.set_sensitive(true);
   popover.show();
 }
 
-void ZoomHandler::on_activated()
+void ZoomHandler::on_entry_activated()
 {
+  LOG(DEBUG) << "ZoomHandler::on_entry_activated";
 
+  std::istringstream is(entry.get_text());
+
+  double val;
+
+  if(!(is >> val))
+    return;
+
+  LOG(DEBUG) << "entry value: " << val;
 }
 
-void ZoomHandler::create_levels()
+void ZoomHandler::create_menu()
 {
+  LOG(DEBUG) << "Creating zoom menu";
+
+  Glib::RefPtr<Glib::Object> obj = builder->get_object("menu_zoom");
+
+
+  menu->append_section("", Glib::RefPtr<Gio::Menu>::cast_dynamic(obj));
+
+  auto level_section = Gio::Menu::create();
+
   for(const ZoomLevel& level: levels)
   {
-    auto act = Gio::MenuItem::create(level.name, "");
+    std::ostringstream str;
 
-    act->set_action_and_target("d", Glib::Variant<double>::create(0));
+    str << "win.zoom(" << std::scientific << level.level << ")";
 
-    menu->append_item(act);
+    level_section->append_item(Gio::MenuItem::create(level.name, str.str()));
   }
+
+  menu->append_section("", level_section);
+}
+
+void ZoomHandler::set_window(MainWindow* window)
+{
+  using namespace std::placeholders;
+
+  auto group = window->get_action_group();
+
+  auto act = Gio::SimpleAction::create("zoom",
+                                       Glib::Variant<double>::variant_type());
+
+  act->signal_activate().connect(std::bind(&ZoomHandler::on_zoom_level_changed, this, _1));
+
+  group->add_action(act);
+
+  group->add_action_with_parameter("zoom-fit-page", std::bind(&ZoomHandler::on_zoom_fit_page, this));
+  group->add_action_with_parameter("zoom-fit-width", std::bind(&ZoomHandler::on_zoom_fit_page, this));
+
+  create_menu();
+}
+
+void ZoomHandler::on_zoom_level_changed(const Glib::VariantBase& value)
+{
+  Glib::Variant<double> double_val =
+    Glib::VariantBase::cast_dynamic<Glib::Variant<double>>(value);
+
+  LOG(DEBUG) << "ZoomHandler::on_zoom_level_changed: " << double_val.get();
+}
+
+void ZoomHandler::on_zoom_fit_page()
+{
+  LOG(DEBUG) << "ZoomHandler::on_zoom_fit_page";
+}
+
+void ZoomHandler::on_zomm_fit_width()
+{
+  LOG(DEBUG) << "ZoomHandler::on_zomm_fit_width";
 }
 
 /*

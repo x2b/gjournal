@@ -14,13 +14,16 @@ public:
    Log();
    virtual ~Log();
    std::ostringstream& get(LogLevel level = INFO);
-public:
+
    static LogLevel reporting_level();
+
 protected:
    std::ostringstream os;
+
 private:
    Log(const Log&);
    Log& operator =(const Log&);
+   std::string to_string(LogLevel level);
 private:
    LogLevel message_level;
 };

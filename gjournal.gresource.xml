@@ -10,6 +10,7 @@
 -->
 
 <file>ui/main_window.ui</file>
+<file>ui/menus.ui</file>
 
 </gresource>
 </gresources>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="menu_zoom">
+    <item>
+          <attribute name="label">Fit Pa_ge</attribute>
+          <attribute name="action">win.zoom-fit-page</attribute>
+    </item>
+    <item>
+          <attribute name="label">Fit _Width</attribute>
+          <attribute name="action">win.zoom-fit-width</attribute>
+    </item>
+  </menu>
+</interface>

@@ -1,0 +1,30 @@
+#ifndef APPLICATION_HH
+#define APPLICATION_HH
+
+#include <gtkmm/application.h>
+
+class MainWindow;
+
+class Application : public Gtk::Application
+{
+public:
+  static Glib::RefPtr<Application> create(int& argc,
+                                          char**& argv,
+                                          const Glib::ustring& application_id=Glib::ustring(),
+                                          Gio::ApplicationFlags flags=Gio::APPLICATION_FLAGS_NONE);
+
+protected:
+  Application(int& argc,
+              char**& argv,
+              const Glib::ustring& application_id=Glib::ustring(),
+              Gio::ApplicationFlags flags=Gio::APPLICATION_FLAGS_NONE);
+
+  void on_startup() override;
+  void on_activate() override;
+  void on_quit();
+
+private:
+  MainWindow* window;
+};
+
+#endif
