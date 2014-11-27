@@ -32,6 +32,10 @@ std::string Log::to_string(LogLevel level)
     case DEBUG:
       return "Debug";
   }
+  
+  
+  
+  return "";
 }
 
 LogLevel Log::reporting_level()

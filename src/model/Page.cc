@@ -9,10 +9,10 @@ Color rulerColor(0x40a0ff);
 Color lineColor(0xff0080);
 Color backColor(0xffffff);
 
-Page::Page(double width, double height, int number)
+Page::Page(double width_, double height_, int number_)
   : Glib::ObjectBase(typeid(Page)),
-    width(width), height(height), number(number),
-    bg_type(NONE)
+    width(width_), height(height_), number(number_),
+    bg_type(BackgroundType::NONE)
 {
 }
 
@@ -41,14 +41,14 @@ int Page::get_number() const
   return number;
 }
 
-void Page::set_number(int _number)
+void Page::set_number(int number_)
 {
-  number = _number;
+  number = number_;
 }
 
-void Page::set_background_type(BackgroundType _bg_type)
+void Page::set_background_type(BackgroundType bg_type_)
 {
-  bg_type = _bg_type;
+  bg_type = bg_type_;
 }
 
 void Page::draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const
@@ -58,16 +58,16 @@ void Page::draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const
 
   switch(bg_type)
   {
-    case NONE:
-      break;
-    case LINED:
-      draw_background_lined(cr);
-    case RULED:
-      draw_background_ruled(cr);
-      break;
-    case GRAPH:
-      draw_background_graph(cr);
-      break;
+  case BackgroundType::NONE:
+    break;
+  case BackgroundType::LINED:
+    draw_background_lined(cr);
+  case BackgroundType::RULED:
+    draw_background_ruled(cr);
+    break;
+  case BackgroundType::GRAPH:
+    draw_background_graph(cr);
+    break;
   }
 }
 

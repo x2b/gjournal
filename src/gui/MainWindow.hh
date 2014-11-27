@@ -6,7 +6,9 @@
 
 #include "model/Document.hh"
 
+#include "gui/DocumentHandler.hh"
 #include "gui/ZoomHandler.hh"
+#include "gui/ZoomWidget.hh"
 
 namespace Gtk
 {
@@ -19,17 +21,17 @@ public:
   MainWindow(BaseObjectType* cobject,
              const Glib::RefPtr<Gtk::Builder>& ref_builder);
 
-  void add_document(DocumentRef doc);
-
   Glib::RefPtr<Gio::SimpleActionGroup> get_action_group();
-
+  DocumentHandler& get_document_handler();
+  
   virtual ~MainWindow();
 
 private:
   Glib::RefPtr<Gtk::Builder> builder;
   Glib::RefPtr<Gio::SimpleActionGroup> group_win;
   Gtk::Stack* stack;
-  ZoomHandler* handler;
+  ZoomWidget* zoom_widget;
+  DocumentHandler doc_handler;
 };
 
 #endif

@@ -7,30 +7,63 @@
 
 #include <gtkmm/layout.h>
 
+class LayoutPosition
+{
+public:
+  LayoutPosition()
+    : space_above(0),
+      space_left(0)
+  {}
+  
+  float space_above, space_left;
+};
+
+/**
+ * @brief A layout for a Document
+ * 
+ */
 class PageLayout : public Gtk::Layout
 {
 public:
   PageLayout();
 
+  /**
+   * This property holds the spacing between rows of widgets
+   */
   Glib::PropertyProxy<int> property_row_spacing()
   {
     return prop_row_spacing.get_proxy();
   }
 
+  /**
+   * This property holds the spacing between the two
+   * columns of widgets for a dual layout
+   */
   Glib::PropertyProxy<int> property_col_spacing()
   {
     return prop_row_spacing.get_proxy();
   }
 
+  /**
+   * This property holds whether or not the layout is dual, i.e.
+   * widgets are displayed besides one another
+   */
   Glib::PropertyProxy<bool> property_dual()
   {
     return prop_dual.get_proxy();
   }
 
+  /**
+   * This property holds whether for a dual layout the
+   * odd (first / third / ...) pages are on the left
+   */
   Glib::PropertyProxy<bool> property_odd_left()
   {
     return prop_odd_left.get_proxy();
   }
+
+  LayoutPosition get_position(const Gdk::Point& point) const;
+  Gdk::Point get_point(LayoutPosition position) const;
 
 protected:
 

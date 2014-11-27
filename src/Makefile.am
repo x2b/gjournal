@@ -3,10 +3,13 @@ bin_PROGRAMS = gjournal
 gjournal_SOURCES = \
 	main.cc \
 	gui/Application.cc \
+	gui/DocumentHandler.cc \
 	gui/JournalWidget.cc \
 	gui/MainWindow.cc \
 	gui/PageLayout.cc \
 	gui/PageWidget.cc \
+	gui/ScrollHandler.cc \
+	gui/ZoomWidget.cc \
 	gui/ZoomHandler.cc \
 	model/Color.cc \
 	model/Document.cc \
@@ -16,7 +19,8 @@ gjournal_SOURCES = \
 	model/Pen.cc \
 	model/Rectangle.cc \
 	model/Stroke.cc \
-	util/Log.cc
+	util/Log.cc \
+	util/Error.cc
 
 RESOURCE_SRC = gjournal-resources.c
 

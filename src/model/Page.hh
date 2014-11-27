@@ -15,10 +15,10 @@ class Page : public Glib::Object
 {
 public:
   Page(double width, double height, int number = -1);
-
+	
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
-  enum BackgroundType
+  enum class BackgroundType
   {
     NONE, LINED, RULED, GRAPH
   };
@@ -29,7 +29,7 @@ public:
 
   void set_number(int number);
 
-  void set_background_type(BackgroundType _bg_type);
+  void set_background_type(BackgroundType bg_type_);
 
 private:
 

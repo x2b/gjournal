@@ -22,7 +22,10 @@ Glib::RefPtr<Application> Application::create(int& argc,
                                               const Glib::ustring& application_id,
                                               Gio::ApplicationFlags flags)
 {
-  return Glib::RefPtr<Application>(new Application(argc, argv, application_id, flags));
+  return Glib::RefPtr<Application>(new Application(argc,
+                                                   argv,
+                                                   application_id,
+                                                   flags));
 }
 
 void Application::on_startup()
@@ -48,7 +51,7 @@ void Application::on_startup()
 
   win_builder->get_widget_derived("main_window", window);
 
-  if(!window)
+  if(not(window))
   {
     LOG(ERROR) << "Could not find main window";
     return;
@@ -56,31 +59,39 @@ void Application::on_startup()
 
   add_window(*window);
 
-  DocumentRef doc = Document::create();
-
-  Gtk::PaperSize paperSize(Gtk::PAPER_NAME_A4);
-
-  PageRef page = doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
-                                 paperSize.get_height(Gtk::UNIT_POINTS),
-                                 1);
-
-  page->set_background_type(Page::GRAPH);
-
-  for(int i = 0; i < 10; ++i)
+  for (int i = 0; i < 2; ++i)
   {
-    doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
-                    paperSize.get_height(Gtk::UNIT_POINTS),
-                    i + 2);
-  }
 
-  window->add_document(doc);
+    DocumentRef doc = Document::create();
+
+    Gtk::PaperSize paperSize(Gtk::PAPER_NAME_A4);
+
+    PageRef page = doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
+                                   paperSize.get_height(Gtk::UNIT_POINTS),
+                                   1);
+
+    if(i == 0)
+      page->set_background_type(Page::BackgroundType::LINED);
+    else
+      page->set_background_type(Page::BackgroundType::RULED);
+      
+    for(int i = 0; i < 10; ++i)
+    {
+      doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
+                      paperSize.get_height(Gtk::UNIT_POINTS),
+                      i + 2);
+    }
+
+    window->get_document_handler().add_document(doc);
+  }
 
   window->set_default_size(800, 600);
   window->set_position(Gtk::WIN_POS_CENTER);
 
   auto act_quit = Gio::SimpleAction::create("quit");
 
-  act_quit->signal_activate().connect(std::bind(&Application::on_quit, this));
+  act_quit->signal_activate().connect(std::bind(&Application::on_quit,
+						this));
 
   add_action(act_quit);
 }

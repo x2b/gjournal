@@ -1,39 +1,38 @@
 #ifndef ZOOMHANDLER_HH
 #define ZOOMHANDLER_HH
 
-#include <giomm/simpleactiongroup.h>
-#include <giomm/menu.h>
-#include <giomm/actionmap.h>
-#include <giomm/application.h>
+#include <glibmm/object.h>
+#include <glibmm/property.h>
 
-#include <gtkmm/hvbox.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/popover.h>
-#include <gtkmm/builder.h>
+class JournalWidget;
 
-class MainWindow;
-
-class ZoomHandler : public Gtk::VBox
+/**
+ * @brief The ZoomHandler stores the current zoom level
+ */
+class ZoomHandler : public Glib::Object
 {
 public:
-  ZoomHandler(BaseObjectType* cobject,
-              const Glib::RefPtr<Gtk::Builder>& ref_builder);
+  ZoomHandler(JournalWidget& parent_);
 
-  void set_window(MainWindow* window);
+  Glib::PropertyProxy_ReadOnly<float> property_zoom_level() const
+  {
+    return Glib::PropertyProxy_ReadOnly<float>(this, "zoom-level");
+  }
+  
+  float get_zoom_level() const;
+  
+  void set_zoom_level(float value);
 
+  void zoom_in();
+  void zoom_out();
+  
+  void zoom_fit_width();
+  void zoom_fit_page();
+  
 private:
-  void on_icon_pressed(Gtk::EntryIconPosition, const GdkEventButton*);
-  void on_entry_activated();
-  void on_zoom_level_changed(const Glib::VariantBase& value);
-  void on_zoom_fit_page();
-  void on_zomm_fit_width();
+  Glib::Property<float> prop_zoom_level;
 
-  void create_menu();
-
-  Glib::RefPtr<Gio::Menu> menu;
-  Gtk::Entry entry;
-  Gtk::Popover popover;
-  Glib::RefPtr<Gtk::Builder> builder;
+  JournalWidget& parent;
 };
 
 #endif

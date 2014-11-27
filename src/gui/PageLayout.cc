@@ -9,12 +9,12 @@ PageLayout::PageLayout()
     prop_dual(*this, "dual", false),
     prop_odd_left(*this, "odd-left", true)
 {
-  auto layout = std::bind(&PageLayout::queue_resize, this);
+  auto layout_func = std::bind(&PageLayout::queue_resize, this);
 
-  property_row_spacing().signal_changed().connect(layout);
-  property_col_spacing().signal_changed().connect(layout);
-  property_dual().signal_changed().connect(layout);
-  property_odd_left().signal_changed().connect(layout);
+  property_row_spacing().signal_changed().connect(layout_func);
+  property_col_spacing().signal_changed().connect(layout_func);
+  property_dual().signal_changed().connect(layout_func);
+  property_odd_left().signal_changed().connect(layout_func);
 }
 
 std::vector<PageLayout::LayoutRow> PageLayout::get_layout_rows()
@@ -25,21 +25,24 @@ std::vector<PageLayout::LayoutRow> PageLayout::get_layout_rows()
   auto it = children.begin(), end = children.end();
 
   bool first_page = true;
-
+  
   while(it != end)
   {
     Gtk::Widget *first_child = *it,
                 *second_child = nullptr;
 
-    if(first_page and !prop_odd_left.get_value())
+    if(prop_dual.get_value())
     {
-      first_page = false;
+      if(first_page and not(prop_odd_left.get_value()))
+      {
+        first_page = false;
 
-      second_child = first_child;
-      first_child = nullptr;
+        second_child = first_child;
+        first_child = nullptr;
+      }
+      else if(++it != end)
+        second_child = *it;
     }
-    else if(++it != end)
-      second_child = *it;
 
     if(first_child and not(first_child->get_visible()))
       first_child = nullptr;
@@ -74,15 +77,18 @@ std::vector<PageLayout::ConstLayoutRow> PageLayout::get_layout_rows() const
     const Gtk::Widget *first_child = *it,
                       *second_child = nullptr;
 
-    if(first_page and !prop_odd_left.get_value())
+    if(prop_dual.get_value())
     {
-      first_page = false;
+      if(first_page and not(prop_odd_left.get_value()))
+      {
+        first_page = false;
 
-      second_child = first_child;
-      first_child = nullptr;
+        second_child = first_child;
+        first_child = nullptr;
+      }
+      else if(++it != end)
+        second_child = *it;
     }
-    else if(++it != end)
-      second_child = *it;
 
     if(first_child and not(first_child->get_visible()))
       first_child = nullptr;
@@ -102,9 +108,179 @@ std::vector<PageLayout::ConstLayoutRow> PageLayout::get_layout_rows() const
   return rows;
 }
 
+LayoutPosition PageLayout::get_position(const Gdk::Point& point) const
+{
+  LayoutPosition pos;
+  auto rows = get_layout_rows();
+  
+  int y = 0, dy;
+
+  for(const auto& row : rows)
+  {
+    const Gtk::Widget *first_child = nullptr,
+                      *second_child = nullptr;
+    
+    std::tie(first_child, second_child) = row;
+    
+    dy = std::max(first_child ? first_child->get_allocated_height() : 0,
+                  second_child ? second_child->get_allocated_height() : 0);
+    
+    if(point.get_y() < y + dy)
+    {
+      pos.space_above += (point.get_y() - y) / float(dy);
+      break;
+    }
+    
+    y += dy;
+    pos.space_above += 1;
+    
+    dy = prop_row_spacing.get_value();
+    
+    if(point.get_y() < y + dy)
+    {
+      pos.space_above += (point.get_y() - y) / float(dy);
+      break;
+    }
+    
+    y += dy;
+    pos.space_above += 1;
+  }
+  
+  int x = 0, dx;
+  
+  int widget_width = get_allocated_width();
+  
+  if(prop_dual.get_value())
+  {
+    widget_width -= prop_col_spacing.get_value();
+    widget_width /= 2;
+  }
+  
+  dx = widget_width;
+  
+  if(point.get_x() < x + dx)
+  {
+    pos.space_left = (point.get_x() - x) / float(dx);
+  }
+  else
+  {
+    pos.space_left += 1;
+    x += dx;
+    
+    if(prop_dual.get_value())
+    {
+      dx = prop_col_spacing.get_value();
+      
+      if(point.get_x() < x + dx)
+      {
+        pos.space_left += (point.get_x() - x) / float(dx);
+      }
+      else
+      {
+        pos.space_left += 1;
+        x += dx;
+      }
+    }
+    
+    dx = widget_width;
+    
+    if(point.get_x() < x + dx)
+    {
+      pos.space_left += (point.get_x() - x) / float(dx);
+    }
+    else
+    {
+      pos.space_left += 1;
+      x += dx;
+    }
+  }
+
+  return pos;
+}
+
+Gdk::Point PageLayout::get_point(LayoutPosition position) const
+{
+  int x = 0, y = 0;
+  
+  auto rows = get_layout_rows();
+  
+  for(const auto& row : rows)
+  {
+    const Gtk::Widget *first_child = nullptr,
+                      *second_child = nullptr;
+    
+    std::tie(first_child, second_child) = row;
+    
+    int dy = std::max(first_child ? first_child->get_allocated_height() : 0,
+                      second_child ? second_child->get_allocated_height() : 0);
+    
+    if(position.space_above < 1)
+    {
+      y += dy * position.space_above;
+      break;
+    }
+    else
+    {
+      y += dy;
+      position.space_above -= 1;
+    }
+
+    dy = prop_row_spacing.get_value();
+
+    if(position.space_above < 1)
+    {
+      y += dy * position.space_above;
+      break;
+    }
+    else
+    {
+      y += dy;
+      position.space_above -= 1;
+    }
+  }
+  
+  int widget_width = get_allocated_width();
+  
+  if(prop_dual.get_value())
+  {
+    widget_width -= prop_col_spacing.get_value();
+    widget_width /= 2;
+  }
+  
+  if(position.space_left < 1)
+  {
+    x += widget_width * position.space_left;
+  }
+  else
+  {
+    x += widget_width;
+    position.space_left -= 1;
+    
+    if(prop_dual.get_value())
+    {
+      if(position.space_left < 1)
+      {
+        x += widget_width * prop_col_spacing.get_value();
+      }
+      else
+      {
+        x += prop_col_spacing.get_value();
+        position.space_left -= 1;
+      }
+    }
+    
+    if(position.space_left < 1)
+    {
+      x += widget_width * position.space_left;
+    }
+  }
+
+  return Gdk::Point(x, y);
+}
+
 bool PageLayout::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
-  Gtk::Allocation alloc = get_allocation();
+  //Gtk::Allocation alloc = get_allocation();
 
   bool x = Gtk::Layout::on_draw(cr);
 
@@ -135,7 +311,7 @@ void PageLayout::get_preferred_width_vfunc(int& minimum_width, int& natural_widt
   {
     int widget_minimum_width, widget_natural_width;
 
-    if(!widget->get_visible())
+    if(not(widget->get_visible()))
       continue;
 
     widget->get_preferred_width(widget_minimum_width, widget_natural_width);
@@ -162,7 +338,7 @@ void PageLayout::get_preferred_height_vfunc(int& minimum_height, int& natural_he
 
   for(const Gtk::Widget* widget : get_children())
   {
-    if(!widget->get_visible())
+    if(not(widget->get_visible()))
       continue;
 
     ++n_visible;
@@ -320,7 +496,7 @@ void PageLayout::on_size_allocate(Gtk::Allocation& allocation)
 
   for(Gtk::Widget* widget : children)
   {
-    if(!widget->get_visible())
+    if(not(widget->get_visible()))
       continue;
 
     ++n_visible;
@@ -349,7 +525,7 @@ void PageLayout::on_size_allocate(Gtk::Allocation& allocation)
 
   for(Gtk::Widget* widget : children)
   {
-    if(!widget->get_visible())
+    if(not(widget->get_visible()))
       continue;
 
     y = place_child(*widget, Alignment::CENTER,

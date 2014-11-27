@@ -3,7 +3,8 @@
 
 #include <list>
 #include <memory>
-#include <string>
+
+#include <glibmm/ustring.h>
 
 #include "Page.hh"
 
@@ -30,7 +31,12 @@ public:
 
   PageList& get_pages();
 
-  std::string& get_URI()
+  int count_pages() const
+  {
+    return pages.size();
+  }
+
+  Glib::ustring& get_URI()
   {
     return uri;
   }
@@ -41,7 +47,7 @@ private:
   Document();
   PageList pages;
 
-  std::string uri;
+  Glib::ustring uri;
 };
 
 #endif
