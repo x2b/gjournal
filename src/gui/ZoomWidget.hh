@@ -32,7 +32,7 @@ private:
   void on_zoom_fit_width();
   void on_zoom_level_changed();
   void on_active_journal_changed();
-  
+
   void create_menu();
 
   void set_label();
@@ -42,7 +42,7 @@ private:
   Gtk::Popover popover;
   Glib::RefPtr<Gtk::Builder> builder;
   MainWindow* main_window;
-  
+
   ZoomHandler *handler;
   sigc::connection handler_connection;
 };

@@ -14,13 +14,13 @@ public:
     : space_above(0),
       space_left(0)
   {}
-  
+
   float space_above, space_left;
 };
 
 /**
  * @brief A layout for a Document
- * 
+ *
  */
 class PageLayout : public Gtk::Layout
 {

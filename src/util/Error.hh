@@ -45,7 +45,7 @@ public:
         << "Func: " << func << std::endl
         << "File: " << file << std::endl
         << "Line: " << line << std::endl;
-    
+
     if(expl)
     {
       str << "Explanation: " << expl << std::endl;

@@ -19,8 +19,7 @@ public:
 
 protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
-  Gtk::SizeRequestMode get_request_mode_vfunc() const override;
-  
+
   void update_size_request();
 
 private:

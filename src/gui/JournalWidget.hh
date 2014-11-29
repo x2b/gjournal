@@ -20,7 +20,7 @@ class JournalWidget : public Gtk::ScrolledWindow
 public:
   /**
    * Constructs a new JournalWidget
-   * 
+   *
    * @param doc The document to be displayed
    */
   JournalWidget(DocumentRef doc);
@@ -41,14 +41,18 @@ public:
 
 protected:
   bool on_scroll_event(GdkEventScroll* event) override;
+  bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
 private:
+
+  void get_debug_msg(std::ostringstream& str);
+
   PageLayout page_layout;
   DocumentRef doc;
   Gtk::Viewport* viewport;
   ScrollHandler scroll_handler;
   ZoomHandler zoom_handler;
-  
+
   std::vector<PageWidget*> pages;
 };
 

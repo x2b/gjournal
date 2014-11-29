@@ -15,7 +15,7 @@ class Page : public Glib::Object
 {
 public:
   Page(double width, double height, int number = -1);
-	
+
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
   enum class BackgroundType

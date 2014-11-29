@@ -23,7 +23,7 @@ public:
 
   Glib::RefPtr<Gio::SimpleActionGroup> get_action_group();
   DocumentHandler& get_document_handler();
-  
+
   virtual ~MainWindow();
 
 private:

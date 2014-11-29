@@ -9,10 +9,11 @@ PageWidget::PageWidget(PageRef page, JournalWidget* parent_)
 {
   set_events(Gdk::ALL_EVENTS_MASK);
   update_size_request();
-  
+
   auto func = std::bind(&PageWidget::on_zoom_level_changed, this);
-  
-  parent->get_zoom_handler().property_zoom_level().signal_changed().connect(func);
+
+  parent->get_zoom_handler().property_zoom_level()
+    .signal_changed().connect(func);
 }
 
 bool PageWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
@@ -25,26 +26,19 @@ bool PageWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
   return true;
 }
 
-Gtk::SizeRequestMode PageWidget::get_request_mode_vfunc() const
-{
-  LOG(DEBUG) << "PageWidget::get_request_mode_vfunc";
-  return Gtk::SIZE_REQUEST_CONSTANT_SIZE;
-}
-
 void PageWidget::on_zoom_level_changed()
 {
-  LOG(DEBUG) << "PageWidget::on_zoom_level_changed";
+  TRACE;
+
   update_size_request();
 }
 
 void PageWidget::update_size_request()
 {
-  LOG(DEBUG) << "PageWidget::update_size_request";
-  
+  TRACE;
+
   float zoom = parent->get_zoom_handler().get_zoom_level();
-  
+
   set_size_request(zoom * page->get_width(),
                    zoom * page->get_height());
-
-  queue_resize();
 }

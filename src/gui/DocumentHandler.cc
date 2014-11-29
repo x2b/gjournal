@@ -9,13 +9,13 @@ DocumentHandler::DocumentHandler()
     stack(nullptr),
     prop_active_journal(*this, "active-journal", nullptr)
 {
-  
+
 }
 
 JournalWidget* DocumentHandler::add_document(DocumentRef doc)
 {
   gj_assert(stack);
-  
+
   JournalWidget* widget = new JournalWidget(doc);
 
   widget->set_hexpand(true);
@@ -28,7 +28,7 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc)
   Glib::ustring title = widget->get_title();
 
   stack->add(*widget, title, title);
-  
+
   return widget;
 }
 
@@ -53,7 +53,7 @@ void DocumentHandler::set_stack(Gtk::Stack* stack_)
 
   auto func = std::bind(&DocumentHandler::on_visible_child_changed,
 			this);
-  
+
   if(stack)
   {
     stack_connection =
@@ -79,5 +79,5 @@ void DocumentHandler::on_visible_child_changed()
       break;
     }
   }
-  
+
 }

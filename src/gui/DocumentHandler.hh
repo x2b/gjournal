@@ -34,7 +34,7 @@ public:
     return Glib::PropertyProxy_ReadOnly<JournalWidget*>(this,
 							"active-journal");
   }
-  
+
 private:
   void on_visible_child_changed();
 
@@ -43,7 +43,7 @@ private:
   sigc::connection stack_connection;
 
   Glib::Property<JournalWidget*> prop_active_journal;
-  
+
   type_signal_document sig_doc_added,
     sig_doc_removed;
 

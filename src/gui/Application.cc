@@ -74,7 +74,7 @@ void Application::on_startup()
       page->set_background_type(Page::BackgroundType::LINED);
     else
       page->set_background_type(Page::BackgroundType::RULED);
-      
+
     for(int i = 0; i < 10; ++i)
     {
       doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
