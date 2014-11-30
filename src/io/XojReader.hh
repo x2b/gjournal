@@ -19,10 +19,10 @@ private:
   PageRef parse_page(const xmlpp::Node* node);
 
   Color parse_color(Glib::ustring& color_name);
-  
+
   void parse_background(const xmlpp::Node* node,
 			PageRef page);
-  
+
   std::vector<double> parse_list(Glib::ustring str);
 };
 

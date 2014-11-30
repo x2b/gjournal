@@ -5,7 +5,7 @@
 Text::Text(const Glib::ustring& text_,
            const Glib::ustring& font_desc,
            const double& font_size,
-           const Gdk::Point& point_)
+           const Point& point_)
   : text(text_), point(point_), color(0)
 {
   font.set_family(font_desc);
@@ -37,13 +37,13 @@ Rectangle Text::bounding_rect() const
   return Rectangle();
 }
 
-void Text::move(Gdk::Point& offset)
+void Text::move(Point& offset)
 {
-  point = Gdk::Point(point.get_x() + offset.get_x(),
+  point = Point(point.get_x() + offset.get_x(),
                      point.get_y() + offset.get_y());
 }
 
-void Text::scale(Gdk::Point& src, double dx, double dy)
+void Text::scale(Point& src, double dx, double dy)
 {
   ///TODO: implement
 }
@@ -52,7 +52,7 @@ void Text::scale(Gdk::Point& src, double dx, double dy)
 TextRef Text::create(const Glib::ustring& text_,
                      const Glib::ustring& font_desc,
                      const double& font_size,
-                     const Gdk::Point& point_)
+                     const Point& point_)
 {
   return TextRef(new Text(text_, font_desc,
                           font_size, point_));

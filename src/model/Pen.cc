@@ -15,7 +15,7 @@ double Pen::get_width() const
 void Pen::set_width(double width_)
 {
   gj_assert(width_ > 0);
-  
+
   width = width_;
 }
 
@@ -33,4 +33,6 @@ void Pen::apply(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
   color.apply(cr);
   cr->set_line_width(width);
+  cr->set_line_join(Cairo::LINE_JOIN_ROUND);
+  cr->set_line_cap(Cairo::LINE_CAP_ROUND);
 }

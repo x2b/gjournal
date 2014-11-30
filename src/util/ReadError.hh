@@ -35,7 +35,7 @@ public:
     return Glib::ustring::compose("Could not open \"%1\"",
 				  filename).c_str();
   }
-  
+
 private:
   Glib::ustring filename;
 };

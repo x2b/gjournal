@@ -10,7 +10,7 @@ void Layer::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
   {
     if(not(element))
       continue;
-    
+
     cr->save();
     element->draw(cr);
     cr->restore();

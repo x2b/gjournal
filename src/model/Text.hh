@@ -7,6 +7,7 @@
 
 #include "Color.hh"
 #include "Element.hh"
+#include "Point.hh"
 
 class Text;
 
@@ -18,8 +19,8 @@ public:
   virtual void draw(const Cairo::RefPtr<Cairo::Context>& cr) const override;
   virtual Rectangle bounding_rect() const override;
 
-  virtual void move(Gdk::Point& offset) override;
-  virtual void scale(Gdk::Point& src, double dx, double dy) override;
+  virtual void move(Point& offset) override;
+  virtual void scale(Point& src, double dx, double dy) override;
 
   virtual ~Text();
 
@@ -28,16 +29,16 @@ public:
   static TextRef create(const Glib::ustring& text_,
                         const Glib::ustring& font_desc,
                         const double& font_size,
-                        const Gdk::Point& point_);
+                        const Point& point_);
 
 private:
   Text(const Glib::ustring& text_,
        const Glib::ustring& font_desc,
        const double& font_size,
-       const Gdk::Point& point_);
+       const Point& point_);
 
   Glib::ustring text;
-  Gdk::Point point;
+  Point point;
   Pango::FontDescription font;
   Color color;
 };

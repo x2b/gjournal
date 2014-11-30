@@ -9,6 +9,7 @@
 #include <cairomm/cairomm.h>
 
 #include "Rectangle.hh"
+#include "Point.hh"
 
 class Element
 {
@@ -16,8 +17,8 @@ public:
   virtual void draw(const Cairo::RefPtr<Cairo::Context>& cr) const = 0;
   virtual Rectangle bounding_rect() const = 0;
 
-  virtual void move(Gdk::Point& offset) = 0;
-  virtual void scale(Gdk::Point& src, double dx, double dy) = 0;
+  virtual void move(Point& offset) = 0;
+  virtual void scale(Point& src, double dx, double dy) = 0;
 
 };
 

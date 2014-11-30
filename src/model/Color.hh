@@ -19,7 +19,7 @@ public:
 
   static Color create(Glib::ustring name);
   static Color parse(Glib::ustring hex);
-  
+
 public:
   uchar r, g, b, a;
 };

@@ -7,6 +7,7 @@
 
 #include "model/Color.hh"
 #include "model/Pen.hh"
+#include "model/PressureStroke.hh"
 #include "model/Stroke.hh"
 #include "model/Text.hh"
 
@@ -15,7 +16,7 @@
 
 XojReader::XojReader()
 {
-  
+
 }
 
 DocumentRef XojReader::read_from_file(const Glib::ustring& filename)
@@ -25,10 +26,10 @@ DocumentRef XojReader::read_from_file(const Glib::ustring& filename)
   doc->set_uri(filename);
 
 
-  LOG(INFO) << "Reading file \"" << filename << "\""; 
-  
+  LOG(INFO) << "Reading file \"" << filename << "\"";
+
   xmlpp::DomParser parser;
-  
+
   //TODO: error handling
   parser.parse_file(filename);
 
@@ -40,8 +41,8 @@ DocumentRef XojReader::read_from_file(const Glib::ustring& filename)
   }
 
   LOG(INFO) << "Read in a document with "
-	    << doc->count_pages() << " pages"; 
-  
+	    << doc->count_pages() << " pages";
+
   return doc;
 }
 
@@ -59,17 +60,17 @@ PageRef XojReader::parse_page(const xmlpp::Node* node)
 
   LOG(DEBUG) << "Reading a page of dimensions "
 	     << width << "x" << height;
-  
+
   page = Page::create(width, height);
 
   parse_background(node, page);
-  
+
   for(const xmlpp::Node* layer_node : node->find("layer"))
   {
     page->add_layer(parse_layer(layer_node));
   }
 
-  
+
   return page;
 }
 
@@ -98,7 +99,7 @@ void XojReader::parse_background(const xmlpp::Node* page_node,
 	{"graph", Page::BackgroundType::GRAPH},});
 
   auto it = known_bg_types.find(style_name);
-  
+
   if(it != known_bg_types.end())
   {
     page->set_background_type(it->second);
@@ -109,7 +110,7 @@ void XojReader::parse_background(const xmlpp::Node* page_node,
     LOG(ERROR) << "Could not find background type "
 	       << style_name;
   }
-  
+
 }
 
 ElementRef XojReader::parse_element(const xmlpp::Node* node)
@@ -117,7 +118,7 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
   Glib::ustring name = node->get_name();
   const xmlpp::Element* element =
     dynamic_cast<const xmlpp::Element*>(node);
-	
+
   if(name == "stroke")
   {
     Glib::ustring tool_name = element->get_attribute_value("tool"),
@@ -127,14 +128,14 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
     // tool_name: pen / eraser / highlighter
 
     Color color = parse_color(color_name);
-    
+
     if(tool_name == "pen")
     {
-      
+
     }
     else if(tool_name == "eraser")
     {
-      
+
     }
     else if(tool_name == "highlighter")
     {
@@ -146,7 +147,7 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
 
     std::vector<double> width_vector(parse_list(width_name)),
       point_vector(parse_list(point_element->get_content()));
-    
+
     LOG(DEBUG) << point_element->get_content();
 
     if(width_vector.size() == 1)
@@ -165,13 +166,37 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
 	++it;
 	double y = *it;
 	++it;
-	
-	stroke->get_points().push_back(Gdk::Point(x, y));
+
+	stroke->get_points().push_back(Point(x, y));
       }
 
       return stroke;
     }
-    
+    else
+    {
+      Pen pen;
+      pen.set_width(*width_vector.begin());
+      pen.set_color(color);
+
+      PressureStrokeRef stroke = PressureStroke::create(pen);
+
+      auto it = point_vector.begin(),
+	vit = width_vector.begin();
+
+      while(it != point_vector.end())
+      {
+	double x = *it;
+	++it;
+	double y = *it;
+	++it;
+	double z = *vit;
+	++vit;
+
+	stroke->get_points().push_back(PressurePoint(x, y, z));
+      }
+
+      return stroke;
+    }
   }
   else if(name == "text" and element)
   {
@@ -184,8 +209,8 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
     Glib::ustring text_content =
       element->get_child_text()->get_content();
 
-    Gdk::Point point(std::stod(x_name), std::stod(y_name));
-    
+    Point point(std::stod(x_name), std::stod(y_name));
+
     auto text = Text::create(text_content, font_name,
 			     std::stod(size_name), point);
 
@@ -193,7 +218,7 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
 
     return text;
   }
-  
+
   return nullptr;
 }
 
@@ -212,14 +237,14 @@ Color XojReader::parse_color(Glib::ustring& color_name)
   }
 
   ParseError(color_name).raise();
-  
-  return Color();  
+
+  return Color();
 }
 
 LayerRef XojReader::parse_layer(const xmlpp::Node* layer_node)
 {
   LayerRef layer(Layer::create());
-   
+
   for(const xmlpp::Node* element_node : layer_node->get_children())
   {
     layer->add_element(parse_element(element_node));
@@ -237,7 +262,7 @@ std::vector<double> XojReader::parse_list(Glib::ustring str)
 
   while(is >> val)
     values.push_back(val);
-  
+
   return values;
 }
 

@@ -62,7 +62,7 @@ Color Color::create(Glib::ustring name)
 Color Color::parse(Glib::ustring str)
 {
   Color col;
-  
+
   if((str.size() == 9 or
       str.size() == 7) and
      str[0] == '#')
@@ -75,11 +75,11 @@ Color Color::parse(Glib::ustring str)
 
       if(str.size() == 9)
 	col.a = std::stoi(str.substr(7, 2), 0, 16);
-	
+
       return col;
     }
   }
-  
+
   ParseError(str).raise();
   return col;
 }

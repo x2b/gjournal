@@ -17,9 +17,9 @@ public:
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
   void add_element(ElementRef element);
-  
+
   static LayerRef create();
-  
+
 private:
   Layer();
   std::list<ElementRef> elements;

@@ -77,7 +77,7 @@ void ZoomWidget::on_entry_activated()
     return;
 
   LOG(DEBUG) << "entry value: " << val;
-  
+
   if(handler)
     handler->set_zoom_level(val / 100.);
 }
@@ -126,7 +126,7 @@ void ZoomWidget::set_window(MainWindow* window)
   create_menu();
 
   main_window = window;
-  
+
   window->get_document_handler()
     .property_active_journal().signal_changed()
     .connect(std::bind(&ZoomWidget::on_active_journal_changed, this));
@@ -141,25 +141,25 @@ void ZoomWidget::on_active_journal_changed()
     .property_active_journal().get_value();
 
   gj_assert(journal);
-    
+
   set_handler(&(journal->get_zoom_handler()));
 }
 
 void ZoomWidget::set_handler(ZoomHandler* handler_)
 {
   LOG(DEBUG) << "ZoomWidget::set_handler";
-  
+
   if(handler_ == handler)
     return;
-  
+
   handler = handler_;
-  
+
   std::function<void()> func = std::bind(&ZoomWidget::on_zoom_level_changed, this);
-  
+
   if(handler)
   {
     LOG(DEBUG) << "ZoomWidget::set_handler: Creating connection";
-    
+
     handler_connection = handler->property_zoom_level().signal_changed().connect(func);
     set_label();
   }
@@ -203,7 +203,7 @@ void ZoomWidget::on_zoom_fit_width()
 }
 
 void ZoomWidget::on_zoom_level_changed()
-{  
+{
   set_label();
 }
 
@@ -212,8 +212,8 @@ void ZoomWidget::set_label()
   LOG(DEBUG) << "ZoomWidget::set_label";
 
   gj_assert(handler);
-  
+
   float val = handler->property_zoom_level().get_value();
-  
-  entry.set_text(Glib::ustring::compose("%1%%", val * 100));  
+
+  entry.set_text(Glib::ustring::compose("%1%%", val * 100));
 }

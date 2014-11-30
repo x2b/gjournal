@@ -27,7 +27,7 @@ public:
     return PageRef(p);
   }
 
-  
+
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
   enum class BackgroundType
@@ -44,7 +44,7 @@ public:
   void set_number(int number);
 
   void set_background_color(Color c);
-  
+
   void set_background_type(BackgroundType bg_type_);
 
 private:

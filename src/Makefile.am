@@ -18,6 +18,9 @@ gjournal_SOURCES = \
 	model/Layer.cc \
 	model/Page.cc \
 	model/Pen.cc \
+	model/Point.cc \
+	model/PressurePoint.cc \
+	model/PressureStroke.cc \
 	model/Rectangle.cc \
 	model/Stroke.cc \
 	model/Text.cc \

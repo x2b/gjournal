@@ -25,13 +25,13 @@ public:
   DocumentHandler& get_document_handler();
 
   void read_document(Glib::RefPtr<Gio::File> file);
-  
+
   virtual ~MainWindow();
 
 private:
   void create_menu();
   void on_open_action_activated();
-  
+
   Glib::RefPtr<Gtk::Builder> window_builder;
   Glib::RefPtr<Gio::SimpleActionGroup> group_win;
   Gtk::Stack* stack;
