@@ -21,7 +21,8 @@ public:
 
   typedef sigc::signal<void, JournalWidget*> type_signal_document;
 
-  JournalWidget* add_document(DocumentRef doc);
+  JournalWidget* add_document(DocumentRef doc,
+			      bool make_active = true);
 
   type_signal_document signal_document_added();
   type_signal_document signal_document_removed();

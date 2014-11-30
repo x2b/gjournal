@@ -12,14 +12,17 @@ DocumentHandler::DocumentHandler()
 
 }
 
-JournalWidget* DocumentHandler::add_document(DocumentRef doc)
+JournalWidget* DocumentHandler::add_document(DocumentRef doc,
+					     bool make_active)
 {
   gj_assert(stack);
+  gj_assert(doc);
 
   JournalWidget* widget = new JournalWidget(doc);
 
   widget->set_hexpand(true);
   widget->set_vexpand(true);
+  widget->show_all();
 
   journals.push_back(widget);
 
@@ -28,6 +31,11 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc)
   Glib::ustring title = widget->get_title();
 
   stack->add(*widget, title, title);
+
+  if(make_active)
+  {
+    stack->property_visible_child() = widget;
+  }
 
   return widget;
 }
