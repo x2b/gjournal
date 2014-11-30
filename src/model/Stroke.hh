@@ -2,6 +2,7 @@
 #define STROKE_HH
 
 #include <list>
+#include <memory>
 
 #include <gdkmm/types.h>
 
@@ -11,18 +12,27 @@
 
 typedef std::list<Gdk::Point> PointList;
 
+class Stroke;
+
+typedef std::shared_ptr<Stroke> StrokeRef;
+
 class Stroke : public Element
 {
+private:
+  Stroke(Pen pen_);
+  
 public:
 
   virtual void draw(const Cairo::RefPtr<Cairo::Context>& cr) const override;
-  virtual Rectangle boundingRect() const override;
+  virtual Rectangle bounding_rect() const override;
 
   virtual void move(Gdk::Point& offset) override;
   virtual void scale(Gdk::Point& src, double dx, double dy) override;
 
-  PointList& getPoints();
-  const PointList& getPoints() const;
+  PointList& get_points();
+  const PointList& get_points() const;
+
+  static StrokeRef create(Pen pen_);
 
 private:
   Pen pen;

@@ -59,16 +59,16 @@ void Application::on_startup()
 
   add_window(*window);
 
-  for (int i = 0; i < 2; ++i)
+  for (int i = 0; i < 1; ++i)
   {
 
     DocumentRef doc = Document::create();
 
     Gtk::PaperSize paperSize(Gtk::PAPER_NAME_A4);
 
-    PageRef page = doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
-                                   paperSize.get_height(Gtk::UNIT_POINTS),
-                                   1);
+    PageRef page = doc->append_page(paperSize.get_width(Gtk::UNIT_POINTS),
+                                    paperSize.get_height(Gtk::UNIT_POINTS),
+                                    1);
 
     if(i == 0)
       page->set_background_type(Page::BackgroundType::LINED);
@@ -77,9 +77,9 @@ void Application::on_startup()
 
     for(int i = 0; i < 10; ++i)
     {
-      doc->appendPage(paperSize.get_width(Gtk::UNIT_POINTS),
-                      paperSize.get_height(Gtk::UNIT_POINTS),
-                      i + 2);
+      doc->append_page(paperSize.get_width(Gtk::UNIT_POINTS),
+                       paperSize.get_height(Gtk::UNIT_POINTS),
+                       i + 2);
     }
 
     window->get_document_handler().add_document(doc);
@@ -91,7 +91,7 @@ void Application::on_startup()
   auto act_quit = Gio::SimpleAction::create("quit");
 
   act_quit->signal_activate().connect(std::bind(&Application::on_quit,
-						this));
+                                                this));
 
   add_action(act_quit);
 }
@@ -103,6 +103,15 @@ void Application::on_activate()
   Gtk::Application::on_activate();
 
   window->show_all();
+}
+
+void Application::on_open(const Gio::Application::type_vec_files& files,
+                          const Glib::ustring& hint)
+{
+  for(auto file : files)
+  {
+    window->read_document(file);
+  }
 }
 
 void Application::on_quit()

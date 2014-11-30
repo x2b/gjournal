@@ -9,13 +9,25 @@
 
 #include <cairomm/cairomm.h>
 
+#include "Color.hh"
 #include "Layer.hh"
+
+class Page;
+
+typedef std::shared_ptr<Page> PageRef;
 
 class Page : public Glib::Object
 {
 public:
-  Page(double width, double height, int number = -1);
 
+  template<typename... Args>
+  static PageRef create(Args&&... args)
+  {
+    Page* p = new Page(std::forward<Args>(args)...);
+    return PageRef(p);
+  }
+
+  
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
   enum class BackgroundType
@@ -23,15 +35,20 @@ public:
     NONE, LINED, RULED, GRAPH
   };
 
+  void add_layer(LayerRef layer);
+
   double get_width() const;
   double get_height() const;
   int get_number() const;
 
   void set_number(int number);
 
+  void set_background_color(Color c);
+  
   void set_background_type(BackgroundType bg_type_);
 
 private:
+  Page(double width, double height, int number = -1);
 
   void draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
@@ -41,12 +58,11 @@ private:
 
   double width, height;
   int number;
+  Color background_color;
 
   BackgroundType bg_type;
 
-  std::list<std::shared_ptr<Layer>> layers;
+  std::list<LayerRef> layers;
 };
-
-typedef std::shared_ptr<Page> PageRef;
 
 #endif

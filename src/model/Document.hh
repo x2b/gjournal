@@ -19,13 +19,14 @@ class Document
 public:
 
   template<typename... Args>
-  PageRef appendPage(Args&&... args)
+  PageRef append_page(Args&&... args)
   {
-    PageRef page = std::make_shared<Page>(std::forward<Args>(args)...);
-    page->set_number(pages.size());
-    pages.push_back(page);
+    PageRef page = Page::create(std::forward<Args>(args)...);
+    append_page(page);
     return page;
   }
+
+  void append_page(PageRef page);
 
   void remove_page(PageRef page);
 
@@ -36,9 +37,14 @@ public:
     return pages.size();
   }
 
-  Glib::ustring& get_URI()
+  Glib::ustring get_uri()
   {
     return uri;
+  }
+
+  void set_uri(const Glib::ustring& name)
+  {
+    uri = name;
   }
 
   static DocumentRef create();

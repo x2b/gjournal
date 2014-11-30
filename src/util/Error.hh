@@ -63,14 +63,14 @@ private:
 
 #if GJOURNAL_DEBUG == 1
 
-#define gj_assert(x)                                                   \
-  do                                                                   \
-  {                                                                                    \
-    if(!(x))                                                                           \
-    {                                                                                  \
-      AssertionFail(#x, __PRETTY_FUNCTION__, __LINE__, __FILE__).raise();              \
-    }                                                                                  \
-  }                                                                                    \
+#define gj_assert(x)                                                    \
+  do                                                                    \
+  {                                                                     \
+    if(!(x))                                                            \
+    {                                                                   \
+      AssertionFail(#x, __PRETTY_FUNCTION__, __LINE__, __FILE__).raise(); \
+    }                                                                   \
+  }                                                                     \
   while(false)
 
 #else

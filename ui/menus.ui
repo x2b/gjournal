@@ -10,4 +10,25 @@
           <attribute name="action">win.zoom-fit-width</attribute>
     </item>
   </menu>
+  <menu id="menu_actions">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Open…</attribute>
+        <attribute name="action">win.open</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Save a Copy…</attribute>
+        <attribute name="action">win.save-copy</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open Containing _Folder</attribute>
+        <attribute name="action">win.open-containing-folder</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Print…</attribute>
+        <attribute name="action">win.print</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
+

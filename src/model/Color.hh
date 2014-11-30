@@ -1,6 +1,9 @@
 #ifndef COLOR_HH
 #define COLOR_HH
 
+#include <stdexcept>
+
+#include <glibmm/ustring.h>
 #include <cairomm/cairomm.h>
 
 typedef unsigned char uchar;
@@ -14,7 +17,10 @@ public:
 
   void apply(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
-private:
+  static Color create(Glib::ustring name);
+  static Color parse(Glib::ustring hex);
+  
+public:
   uchar r, g, b, a;
 };
 

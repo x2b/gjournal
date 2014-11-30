@@ -1,7 +1,5 @@
 #include "Page.hh"
 
-#include "Color.hh"
-
 const double graphSize = 14.17;
 const double rulingSize = 24;
 
@@ -9,9 +7,11 @@ Color rulerColor(0x40a0ff);
 Color lineColor(0xff0080);
 Color backColor(0xffffff);
 
-Page::Page(double width_, double height_, int number_)
+Page::Page(double width_, double height_,
+	   int number_)
   : Glib::ObjectBase(typeid(Page)),
     width(width_), height(height_), number(number_),
+    background_color(backColor),
     bg_type(BackgroundType::NONE)
 {
 }
@@ -24,6 +24,11 @@ void Page::draw(const Cairo::RefPtr<Cairo::Context>& cr) const
   {
     layer->draw(cr);
   }
+}
+
+void Page::add_layer(LayerRef layer)
+{
+  layers.push_back(layer);
 }
 
 double Page::get_width() const
@@ -46,6 +51,11 @@ void Page::set_number(int number_)
   number = number_;
 }
 
+void Page::set_background_color(Color c_)
+{
+  background_color = c_;
+}
+
 void Page::set_background_type(BackgroundType bg_type_)
 {
   bg_type = bg_type_;
@@ -53,7 +63,7 @@ void Page::set_background_type(BackgroundType bg_type_)
 
 void Page::draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const
 {
-  backColor.apply(cr);
+  background_color.apply(cr);
   cr->paint();
 
   switch(bg_type)

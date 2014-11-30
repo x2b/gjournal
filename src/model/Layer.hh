@@ -8,14 +8,21 @@
 
 #include "Element.hh"
 
+class Layer;
+typedef std::shared_ptr<Layer> LayerRef;
+
 class Layer
 {
 public:
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
+  void add_element(ElementRef element);
+  
+  static LayerRef create();
+  
 private:
-
-  std::list<std::shared_ptr<Element>> elements;
+  Layer();
+  std::list<ElementRef> elements;
 };
 
-#endif
+#endif /* LAYER_HH */

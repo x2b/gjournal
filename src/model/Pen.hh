@@ -8,20 +8,21 @@
 
 #include "Color.hh"
 
-class Pen : public Glib::Object
+class Pen
 {
 public:
   Pen();
 
   void apply(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
-  double getWidth();
-  void setWidth(double width);
+  double get_width() const;
+  void set_width(double width);
 
-  Color& getColor();
+  Color get_color() const;
+  void set_color(Color col);
 
 private:
-  Glib::Property<double> prop_width;
+  double width;
   Color color;
 };
 

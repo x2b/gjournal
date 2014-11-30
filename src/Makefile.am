@@ -11,6 +11,7 @@ gjournal_SOURCES = \
 	gui/ScrollHandler.cc \
 	gui/ZoomWidget.cc \
 	gui/ZoomHandler.cc \
+	io/XojReader.cc \
 	model/Color.cc \
 	model/Document.cc \
 	model/Element.cc \
@@ -19,8 +20,10 @@ gjournal_SOURCES = \
 	model/Pen.cc \
 	model/Rectangle.cc \
 	model/Stroke.cc \
+	model/Text.cc \
 	util/Log.cc \
-	util/Error.cc
+	util/Error.cc \
+	util/ReadError.cc
 
 RESOURCE_SRC = gjournal-resources.c
 

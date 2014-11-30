@@ -1,5 +1,11 @@
 #include "Document.hh"
 
+void Document::append_page(PageRef page)
+{
+  page->set_number(pages.size());
+  pages.push_back(page);
+}
+
 void Document::remove_page(PageRef page)
 {
   auto it = get_pages().begin();

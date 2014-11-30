@@ -35,7 +35,7 @@ JournalWidget::~JournalWidget()
 
 Glib::ustring JournalWidget::get_title() const
 {
-  Glib::ustring title = doc->get_URI();
+  Glib::ustring title = doc->get_uri();
 
   if(title.empty())
   {
