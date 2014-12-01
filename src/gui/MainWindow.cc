@@ -18,7 +18,8 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
     window_builder(ref_builder),
     group_win(Gio::SimpleActionGroup::create()),
     stack(nullptr),
-    zoom_widget(nullptr)
+    zoom_widget(nullptr),
+    drag_handler(*this)
 {
   LOG(DEBUG) << "Created main window";
 

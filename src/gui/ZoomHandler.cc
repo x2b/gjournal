@@ -5,7 +5,7 @@
 #include "util/Error.hh"
 #include "util/Log.hh"
 
-const float max_zoom = 2.0f;
+const float max_zoom = 4.0f;
 const float min_zoom = 0.5f;
 const float zoom_inc = 1.05f;
 

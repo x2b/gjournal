@@ -24,7 +24,7 @@ if test -z "$GLIB_COMPILE_RESOURCES"; then
   AC_MSG_ERROR([glib-compile-resources not found])
 fi
 
-pkg_cpp_modules="gtkmm-3.0 libxml++-2.6"
+pkg_cpp_modules="gtkmm-3.0 >= 3.14 libxml++-2.6"
 pkg_cc_modules="gio-2.0"
 
 PKG_CHECK_MODULES(PACKAGE_CPP, [$pkg_cpp_modules])

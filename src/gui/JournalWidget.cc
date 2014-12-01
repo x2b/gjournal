@@ -1,5 +1,7 @@
 #include "JournalWidget.hh"
 
+#include <giomm/file.h>
+
 #include "gui/PageWidget.hh"
 #include "util/Log.hh"
 
@@ -35,14 +37,17 @@ JournalWidget::~JournalWidget()
 
 Glib::ustring JournalWidget::get_title() const
 {
-  Glib::ustring title = doc->get_uri();
+  Glib::ustring uri = doc->get_uri();
 
-  if(title.empty())
+  if(uri.empty())
   {
-    title = "untitled";
+    return("untitled");
   }
-
-  return title;
+  else
+  {
+    auto file = Gio::File::create_for_uri(uri);
+    return file->get_basename();
+  }
 }
 
 PageLayout& JournalWidget::get_layout()

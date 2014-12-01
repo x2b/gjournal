@@ -7,6 +7,7 @@
 #include "model/Document.hh"
 
 #include "gui/DocumentHandler.hh"
+#include "gui/DragHandler.hh"
 #include "gui/ZoomHandler.hh"
 #include "gui/ZoomWidget.hh"
 
@@ -37,6 +38,7 @@ private:
   Gtk::Stack* stack;
   ZoomWidget* zoom_widget;
   DocumentHandler doc_handler;
+  DragHandler drag_handler;
 };
 
-#endif
+#endif /* MAINWINDOW_HH */

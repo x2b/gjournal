@@ -148,7 +148,7 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
     std::vector<double> width_vector(parse_list(width_name)),
       point_vector(parse_list(point_element->get_content()));
 
-    LOG(DEBUG) << point_element->get_content();
+    //LOG(DEBUG) << point_element->get_content();
 
     if(width_vector.size() == 1)
     {
