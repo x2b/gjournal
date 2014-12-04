@@ -13,6 +13,8 @@ public:
                                           const Glib::ustring& application_id=Glib::ustring(),
                                           Gio::ApplicationFlags flags=Gio::APPLICATION_FLAGS_NONE);
 
+  virtual ~Application();
+
 protected:
   Application(int& argc,
               char**& argv,
@@ -24,6 +26,8 @@ protected:
   void on_open(const Gio::Application::type_vec_files& files,
 	       const Glib::ustring& hint) override;
   void on_quit();
+
+  void on_window_hide(MainWindow* window_);
 
 private:
   MainWindow* window;

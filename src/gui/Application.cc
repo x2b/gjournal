@@ -32,7 +32,7 @@ Glib::RefPtr<Application> Application::create(int& argc,
 
 void Application::on_startup()
 {
-  LOG(DEBUG) << "Application::on_startup";
+  TRACE;
 
   Gtk::Application::on_startup();
 
@@ -90,6 +90,8 @@ void Application::on_startup()
   window->set_default_size(800, 600);
   window->set_position(Gtk::WIN_POS_CENTER);
 
+  window->signal_hide().connect(std::bind(&Application::on_window_hide, this, window));
+
   auto act_quit = Gio::SimpleAction::create("quit");
 
   act_quit->signal_activate().connect(std::bind(&Application::on_quit,
@@ -100,7 +102,7 @@ void Application::on_startup()
 
 void Application::on_activate()
 {
-  LOG(DEBUG) << "Application::on_activate";
+  TRACE;
 
   Gtk::Application::on_activate();
 
@@ -120,7 +122,27 @@ void Application::on_open(const Gio::Application::type_vec_files& files,
   window->present();
 }
 
+void Application::on_window_hide(MainWindow* window_)
+{
+  TRACE;
+
+  if(window == window_)
+  {
+    window = nullptr;
+  }
+  
+  delete window_;
+}
+
 void Application::on_quit()
 {
-  LOG(DEBUG) << "Application::on_quit";
+  TRACE;
+
+  delete window;
+  window = nullptr;
+}
+
+Application::~Application()
+{
+  TRACE;
 }

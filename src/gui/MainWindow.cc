@@ -148,5 +148,8 @@ void MainWindow::on_print_action_activated()
 
 MainWindow::~MainWindow()
 {
-
+  TRACE;
+  delete stack;
+  delete zoom_widget;
+  delete position_widget;
 }

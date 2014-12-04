@@ -18,7 +18,7 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc,
   gj_assert(stack);
   gj_assert(doc);
 
-  JournalWidget* widget = new JournalWidget(doc);
+  JournalWidget* widget = Gtk::manage(new JournalWidget(doc));
 
   widget->set_hexpand(true);
   widget->set_vexpand(true);

@@ -14,6 +14,7 @@ class PageWidget : public Gtk::DrawingArea
 {
 public:
   PageWidget(PageRef page, JournalWidget* parent);
+  virtual ~PageWidget();
 
   void on_zoom_level_changed();
 

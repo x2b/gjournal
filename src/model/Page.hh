@@ -20,6 +20,8 @@ class Page : public Glib::Object
 {
 public:
 
+  virtual ~Page();
+
   template<typename... Args>
   static PageRef create(Args&&... args)
   {

@@ -1,5 +1,7 @@
 #include "Page.hh"
 
+#include "util/Log.hh"
+
 const double graphSize = 14.17;
 const double rulingSize = 24;
 
@@ -14,6 +16,11 @@ Page::Page(double width_, double height_,
     background_color(backColor),
     bg_type(BackgroundType::NONE)
 {
+}
+
+Page::~Page()
+{
+  TRACE;
 }
 
 void Page::draw(const Cairo::RefPtr<Cairo::Context>& cr) const

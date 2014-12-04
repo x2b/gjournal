@@ -11,8 +11,8 @@ JournalWidget::JournalWidget(DocumentRef doc_)
     scroll_handler(*this),
     zoom_handler(*this)
 {
-  viewport = new Gtk::Viewport(get_hadjustment(),
-                               get_vadjustment());
+  viewport = Gtk::manage(new Gtk::Viewport(get_hadjustment(),
+                                           get_vadjustment()));
 
   viewport->set_hadjustment(get_hadjustment());
   viewport->set_vadjustment(get_vadjustment());
@@ -24,7 +24,7 @@ JournalWidget::JournalWidget(DocumentRef doc_)
 
   for(PageRef& page : doc->get_pages())
   {
-    PageWidget* widget = new PageWidget(page, this);
+    PageWidget* widget = Gtk::manage(new PageWidget(page, this));
     page_layout.add(*widget);
     pages.push_back(widget);
   }
@@ -32,7 +32,8 @@ JournalWidget::JournalWidget(DocumentRef doc_)
 
 JournalWidget::~JournalWidget()
 {
-  delete viewport;
+  TRACE;
+  //delete viewport;
 }
 
 Glib::ustring JournalWidget::get_title() const
@@ -102,6 +103,10 @@ bool JournalWidget::on_scroll_event(GdkEventScroll* event)
     {
       zoom_handler.zoom_out();
     }
+    else
+    {
+      LOG(ERROR) << "Invalid zoom direction";
+    }
 
     return true;
   }
@@ -119,25 +124,25 @@ bool JournalWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
   Gdk::Rectangle rect = viewport->get_allocation();
 
   viewport->translate_coordinates(*this,
-				  rect.get_x(),
-				  rect.get_y(),
-				  xmin, ymin);
+                                  rect.get_x(),
+                                  rect.get_y(),
+                                  xmin, ymin);
 
   viewport->translate_coordinates(*this,
-				  rect.get_x() + rect.get_width(),
-				  rect.get_y() + rect.get_height(),
-				  xmax, ymax);
+                                  rect.get_x() + rect.get_width(),
+                                  rect.get_y() + rect.get_height(),
+                                  xmax, ymax);
 
   rect = Gdk::Rectangle(xmin, ymin, xmax - xmin, ymax - ymin);
 
   cr->set_source_rgb(1., 0, 0);
 
   /*
-  cr->rectangle(rect.get_x(), rect.get_y(),
-		rect.get_x() + rect.get_width(),
-		rect.get_y() + rect.get_height());
+    cr->rectangle(rect.get_x(), rect.get_y(),
+    rect.get_x() + rect.get_width(),
+    rect.get_y() + rect.get_height());
 
-  cr->stroke();
+    cr->stroke();
   */
 
 
@@ -183,8 +188,8 @@ void JournalWidget::get_debug_msg(std::ostringstream& str)
   LayoutPosition pos = get_layout().get_position(point);
 
   /*
-  auto hadj = viewport->get_hadjustment();
-  auto vadj = viewport->get_vadjustment();
+    auto hadj = viewport->get_hadjustment();
+    auto vadj = viewport->get_vadjustment();
   */
 
   str << "Visible rectangle: \n"

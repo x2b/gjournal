@@ -16,6 +16,11 @@ PageWidget::PageWidget(PageRef page, JournalWidget* parent_)
     .signal_changed().connect(func);
 }
 
+PageWidget::~PageWidget()
+{
+  TRACE;
+}
+
 bool PageWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   float zoom = parent->get_zoom_handler().get_zoom_level();

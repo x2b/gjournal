@@ -24,7 +24,7 @@ public:
    * @param doc The document to be displayed
    */
   JournalWidget(DocumentRef doc);
-  ~JournalWidget();
+  virtual ~JournalWidget();
 
   /**
    * Returns the suggested title of this JournalWidget
