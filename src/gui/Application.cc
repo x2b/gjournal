@@ -5,6 +5,8 @@
 #include <gtkmm/papersize.h>
 
 #include "gui/MainWindow.hh"
+
+#include "util/Error.hh"
 #include "util/Log.hh"
 
 Application::Application(int& argc,
@@ -14,7 +16,7 @@ Application::Application(int& argc,
   : Gtk::Application(argc, argv, application_id, flags),
     window(nullptr)
 {
-
+  set_flags(Gio::APPLICATION_HANDLES_OPEN);
 }
 
 Glib::RefPtr<Application> Application::create(int& argc,
@@ -108,10 +110,14 @@ void Application::on_activate()
 void Application::on_open(const Gio::Application::type_vec_files& files,
                           const Glib::ustring& hint)
 {
+  gj_assert(window);
+
   for(auto file : files)
   {
     window->read_document(file);
   }
+  
+  window->present();
 }
 
 void Application::on_quit()
