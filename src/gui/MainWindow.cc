@@ -8,7 +8,10 @@
 #include <gtkmm/stack.h>
 
 #include "gui/JournalWidget.hh"
+#include "gui/PrintOperation.hh"
+
 #include "io/XojReader.hh"
+
 #include "util/Log.hh"
 #include "util/ReadError.hh"
 
@@ -79,6 +82,9 @@ void MainWindow::create_menu()
   group_win->add_action_with_parameter("open",
                                        std::bind(&MainWindow::on_open_action_activated,
                                                  this));
+
+  group_win->add_action_with_parameter("print",
+                                       std::bind(&MainWindow::on_print_action_activated, this));
 }
 
 void MainWindow::on_open_action_activated()
@@ -122,6 +128,22 @@ void MainWindow::on_open_action_activated()
     }
   }
 
+}
+
+void MainWindow::on_print_action_activated()
+{
+  TRACE;
+
+  JournalWidget* active_journal
+    = get_document_handler().property_active_journal().get_value();
+
+  if(not(active_journal))
+    return;
+
+  auto op =
+    PrintOperation::create(active_journal->get_document());
+
+  op->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, *this);
 }
 
 MainWindow::~MainWindow()

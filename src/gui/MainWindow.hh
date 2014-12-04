@@ -33,6 +33,7 @@ public:
 private:
   void create_menu();
   void on_open_action_activated();
+  void on_print_action_activated();
 
   Glib::RefPtr<Gtk::Builder> window_builder;
   Glib::RefPtr<Gio::SimpleActionGroup> group_win;

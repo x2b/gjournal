@@ -116,7 +116,7 @@ void Application::on_open(const Gio::Application::type_vec_files& files,
   {
     window->read_document(file);
   }
-  
+
   window->present();
 }
 
