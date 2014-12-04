@@ -17,6 +17,8 @@ public:
 
   void on_zoom_level_changed();
 
+  PageRef get_page();
+
 protected:
   bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 

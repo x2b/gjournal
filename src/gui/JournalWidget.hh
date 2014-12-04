@@ -36,8 +36,21 @@ public:
    */
   PageLayout& get_layout();
 
+  /**
+   * Returns the rectangle occupied by a given
+   * PageWidget  contained in this JournalWidget
+   */
+  Gdk::Rectangle get_rectangle(PageWidget& widget);
+
   ScrollHandler& get_scroll_handler();
   ZoomHandler& get_zoom_handler();
+
+  DocumentRef get_document();
+
+  std::vector<PageWidget*>& get_page_widgets()
+  {
+    return pages;
+  }
 
 protected:
   bool on_scroll_event(GdkEventScroll* event) override;
@@ -47,13 +60,12 @@ private:
 
   void get_debug_msg(std::ostringstream& str);
 
+  std::vector<PageWidget*> pages;
   PageLayout page_layout;
   DocumentRef doc;
   Gtk::Viewport* viewport;
   ScrollHandler scroll_handler;
   ZoomHandler zoom_handler;
-
-  std::vector<PageWidget*> pages;
 };
 
 #endif

@@ -3,13 +3,6 @@
 #include <cairomm/cairomm.h>
 
 #include "gui/Application.hh"
-#include "gui/JournalWidget.hh"
-#include "gui/MainWindow.hh"
-
-#include "model/Document.hh"
-
-#include "util/Log.hh"
-
 
 int main(int argc, char *argv[])
 {

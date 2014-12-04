@@ -22,7 +22,7 @@ bool PageWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
   cr->scale(zoom, zoom);
 
-  page->draw(cr);
+  get_page()->draw(cr);
   return true;
 }
 
@@ -31,6 +31,11 @@ void PageWidget::on_zoom_level_changed()
   TRACE;
 
   update_size_request();
+}
+
+PageRef PageWidget::get_page()
+{
+  return page;
 }
 
 void PageWidget::update_size_request()

@@ -37,6 +37,11 @@ public:
     return pages.size();
   }
 
+  bool empty() const
+  {
+    return pages.empty();
+  }
+
   Glib::ustring get_uri()
   {
     return uri;

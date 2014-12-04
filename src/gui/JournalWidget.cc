@@ -55,6 +55,23 @@ PageLayout& JournalWidget::get_layout()
   return page_layout;
 }
 
+Gdk::Rectangle JournalWidget::get_rectangle(PageWidget& widget)
+{
+  Gdk::Rectangle rect;
+
+  rect.set_width(widget.get_allocated_width());
+  rect.set_height(widget.get_allocated_height());
+
+  int x = 0, y = 0;
+
+  widget.translate_coordinates(get_layout(), 0, 0, x, y);
+
+  rect.set_x(x);
+  rect.set_y(y);
+
+  return rect;
+}
+
 ScrollHandler& JournalWidget::get_scroll_handler()
 {
   return scroll_handler;
@@ -64,6 +81,11 @@ ScrollHandler& JournalWidget::get_scroll_handler()
 ZoomHandler& JournalWidget::get_zoom_handler()
 {
   return zoom_handler;
+}
+
+DocumentRef JournalWidget::get_document()
+{
+  return doc;
 }
 
 bool JournalWidget::on_scroll_event(GdkEventScroll* event)
@@ -153,7 +175,8 @@ bool JournalWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 void JournalWidget::get_debug_msg(std::ostringstream& str)
 {
-  Gdk::Rectangle rect = get_scroll_handler().get_current_rectangle();
+  Rectangle rect =
+    get_scroll_handler().property_current_rectangle().get_value();
 
   Gdk::Point point = get_scroll_handler().get_center_point();
 

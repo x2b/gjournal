@@ -7,10 +7,10 @@ DragHandler::DragHandler(MainWindow& parent_)
   : parent(parent_)
 {
   using namespace std::placeholders;
-  
+
   std::vector<Gtk::TargetEntry> list_targets;
   list_targets.push_back(Gtk::TargetEntry("text/uri-list"));
-  
+
   parent.drag_dest_set(list_targets);
 
   auto func =

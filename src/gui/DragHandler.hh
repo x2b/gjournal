@@ -14,7 +14,7 @@ public:
 			     int x, int y,
 			     const Gtk::SelectionData& selection_data,
 			     guint info, guint time);
-  
+
 private:
   MainWindow& parent;
 };

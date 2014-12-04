@@ -7,30 +7,10 @@
 
 #include "gui/MainWindow.hh"
 #include "gui/ZoomHandler.hh"
+#include "gui/ZoomLevel.hh"
 
 #include "util/Error.hh"
 #include "util/Log.hh"
-
-struct ZoomLevel
-{
-  ZoomLevel(std::string name_, double level_)
-    : name(name_), level(level_)
-  {}
-
-  std::string name;
-  double level;
-};
-
-
-const std::vector<ZoomLevel> levels({ZoomLevel("50%", 0.5),
-                                     ZoomLevel("70%", 0.7071067811),
-                                     ZoomLevel("85%", 0.8408964152),
-                                     ZoomLevel("100%", 1.0),
-                                     ZoomLevel("125%", 1.1892071149),
-                                     ZoomLevel("150%", 1.4142135623),
-                                     ZoomLevel("175%", 1.6817928304),
-                                     ZoomLevel("200%", 2.0),
-                                     ZoomLevel("400%", 4.0)});
 
 ZoomWidget::ZoomWidget(BaseObjectType* cobject,
                        const Glib::RefPtr<Gtk::Builder>& ref_builder)
@@ -68,7 +48,7 @@ void ZoomWidget::on_icon_pressed(Gtk::EntryIconPosition pos,
 
 void ZoomWidget::on_entry_activated()
 {
-  LOG(DEBUG) << "ZoomWidget::on_entry_activated";
+  TRACE;
 
   std::istringstream is(entry.get_text());
 
@@ -85,7 +65,7 @@ void ZoomWidget::on_entry_activated()
 
 void ZoomWidget::create_menu()
 {
-  LOG(DEBUG) << "Creating zoom menu";
+  TRACE;
 
   Glib::RefPtr<Glib::Object> obj = builder->get_object("menu_zoom");
 
@@ -214,7 +194,11 @@ void ZoomWidget::set_label()
 
   gj_assert(handler);
 
-  float val = handler->property_zoom_level().get_value();
+  float val = 100 * handler->property_zoom_level().get_value();
 
-  entry.set_text(Glib::ustring::compose("%1%%", val * 100));
+  // a small hack to make sure <= 2 decimal
+  // points are displayed
+  val = int(val * 100) / 100.0f;
+
+  entry.set_text(Glib::ustring::compose("%1%%", val));
 }

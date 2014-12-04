@@ -1,13 +1,10 @@
 #include "ZoomHandler.hh"
 
 #include "gui/JournalWidget.hh"
+#include "gui/ZoomLevel.hh"
 
 #include "util/Error.hh"
 #include "util/Log.hh"
-
-const float max_zoom = 4.0f;
-const float min_zoom = 0.5f;
-const float zoom_inc = 1.05f;
 
 ZoomHandler::ZoomHandler(JournalWidget& parent_)
   : Glib::ObjectBase(typeid(ZoomHandler)),
@@ -25,8 +22,8 @@ void ZoomHandler::set_zoom_level(float value)
 
   Gdk::Point pt = parent.get_scroll_handler().get_center_point();
   layout_pos = parent.get_layout().get_position(pt);
-  Gdk::Rectangle rect =
-    parent.get_scroll_handler().get_current_rectangle();
+  Rectangle rect =
+    parent.get_scroll_handler().property_current_rectangle().get_value();
 
   fx = (pt.get_x() - rect.get_x()) / float(rect.get_width());
   fy = (pt.get_y() - rect.get_y()) / float(rect.get_height());
@@ -70,7 +67,7 @@ void ZoomHandler::on_layout_size_allocated(Gtk::Allocation&)
 {
   TRACE;
 
-  parent.get_scroll_handler().scroll_to(layout_pos, fx, fy);
+  parent.get_scroll_handler().scroll_to_position(layout_pos, fx, fy);
 
   layout_con.disconnect();
 }

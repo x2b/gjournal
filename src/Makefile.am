@@ -9,6 +9,7 @@ gjournal_SOURCES = \
 	gui/MainWindow.cc \
 	gui/PageLayout.cc \
 	gui/PageWidget.cc \
+	gui/PositionWidget.cc \
 	gui/ScrollHandler.cc \
 	gui/ZoomWidget.cc \
 	gui/ZoomHandler.cc \

@@ -19,6 +19,7 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
     group_win(Gio::SimpleActionGroup::create()),
     stack(nullptr),
     zoom_widget(nullptr),
+    position_widget(nullptr),
     drag_handler(*this)
 {
   LOG(DEBUG) << "Created main window";
@@ -30,8 +31,11 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
   doc_handler.set_stack(stack);
 
   window_builder->get_widget_derived("zoom", zoom_widget);
+  window_builder->get_widget_derived("position_widget",
+				     position_widget);
 
   zoom_widget->set_window(this);
+  position_widget->set_window(this);
 
   create_menu();
 }

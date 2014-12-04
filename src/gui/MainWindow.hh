@@ -8,6 +8,7 @@
 
 #include "gui/DocumentHandler.hh"
 #include "gui/DragHandler.hh"
+#include "gui/PositionWidget.hh"
 #include "gui/ZoomHandler.hh"
 #include "gui/ZoomWidget.hh"
 
@@ -37,6 +38,7 @@ private:
   Glib::RefPtr<Gio::SimpleActionGroup> group_win;
   Gtk::Stack* stack;
   ZoomWidget* zoom_widget;
+  PositionWidget* position_widget;
   DocumentHandler doc_handler;
   DragHandler drag_handler;
 };

@@ -5,7 +5,7 @@
 #include <glibmm/property.h>
 #include <gtkmm/widget.h>
 
-#include "PageLayout.hh"
+#include "gui/PageLayout.hh"
 
 class JournalWidget;
 
