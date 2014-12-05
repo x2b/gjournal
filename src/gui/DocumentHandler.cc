@@ -18,19 +18,38 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc,
   gj_assert(stack);
   gj_assert(doc);
 
-  JournalWidget* widget = Gtk::manage(new JournalWidget(doc));
+  const Glib::ustring uri = doc->get_uri();
+  JournalWidget* widget = nullptr;
 
-  widget->set_hexpand(true);
-  widget->set_vexpand(true);
-  widget->show_all();
+  if(not(uri.empty()))
+  {
+    auto it = journals_by_uri.find(uri);
 
-  journals.push_back(widget);
+    if(it != journals_by_uri.end())
+      widget = it->second;
+  }
 
-  signal_document_added().emit(widget);
+  if(not(widget))
+  {
+    widget = Gtk::manage(new JournalWidget(doc));
 
-  Glib::ustring title = widget->get_title();
+    widget->set_hexpand(true);
+    widget->set_vexpand(true);
+    widget->show_all();
 
-  stack->add(*widget, title, title);
+    journals.push_back(widget);
+
+    if(not(uri.empty()))
+    {
+      journals_by_uri.insert(std::make_pair(uri, widget));
+    }
+
+    signal_document_added().emit(widget);
+
+    Glib::ustring title = widget->get_title();
+
+    stack->add(*widget, title, title);
+  }
 
   if(make_active)
   {

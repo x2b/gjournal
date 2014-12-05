@@ -2,6 +2,7 @@
 #define DOCUMENTHANDLER_HH
 
 #include <vector>
+#include <map>
 
 #include <glibmm/object.h>
 
@@ -42,6 +43,9 @@ private:
   Gtk::Stack* stack;
   std::vector<JournalWidget*> journals;
   sigc::connection stack_connection;
+
+  std::map<Glib::ustring,
+           JournalWidget*> journals_by_uri;
 
   Glib::Property<JournalWidget*> prop_active_journal;
 
