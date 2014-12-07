@@ -7,6 +7,10 @@
 
 #include <gtkmm/layout.h>
 
+/**
+ * @brief A position in the layout independent of allocated sizes
+ *
+ */
 class LayoutPosition
 {
 public:
@@ -62,7 +66,15 @@ public:
     return prop_odd_left.get_proxy();
   }
 
+  /**
+   * This function maps a point to a layout position
+   */
   LayoutPosition get_position(const Gdk::Point& point) const;
+
+  /**
+   * This functions performs the opposite of
+   * get_position(const Gdk::Point& point) const
+   */
   Gdk::Point get_point(LayoutPosition position) const;
 
 protected:

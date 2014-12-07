@@ -23,9 +23,11 @@ const std::vector<ZoomLevel> levels({ZoomLevel("50%", 0.5),
                                      ZoomLevel("200%", 2.0),
                                      ZoomLevel("400%", 4.0)});
 
-const float max_zoom = 4.0f;
-const float min_zoom = 0.5f;
-const float zoom_inc = 1.05f;
+const double max_zoom = 4.0f;
+const double min_zoom = 0.5f;
+const double zoom_inc = 1.05f;
 
+// margins are used for scroll to page / fit to page
+const int page_margin = 15;
 
 #endif /* ZOOMLEVEL_HH */

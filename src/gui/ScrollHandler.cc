@@ -3,6 +3,7 @@
 #include "gui/JournalWidget.hh"
 #include "gui/PageLayout.hh"
 #include "gui/PageWidget.hh"
+#include "gui/ZoomLevel.hh"
 
 #include "util/Error.hh"
 #include "util/Log.hh"
@@ -71,7 +72,8 @@ void ScrollHandler::scroll_to_page(PageWidget* page,
   Gdk::Point point(rect.get_x(), rect.get_y());
 
   if(leave_space)
-    point = Gdk::Point(point.get_x() - 10, point.get_y() - 10);
+    point = Gdk::Point(point.get_x() - page_margin,
+                       point.get_y() - page_margin);
 
   const double x = point.get_x() - fx*dx,
     y = point.get_y() - fy*dy;

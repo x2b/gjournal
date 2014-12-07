@@ -130,7 +130,7 @@ void Application::on_window_hide(MainWindow* window_)
   {
     window = nullptr;
   }
-  
+
   delete window_;
 }
 

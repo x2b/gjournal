@@ -8,25 +8,30 @@
 
 ZoomHandler::ZoomHandler(JournalWidget& parent_)
   : Glib::ObjectBase(typeid(ZoomHandler)),
-    prop_zoom_level(*this, "zoom-level", 1.0f),
+    prop_zoom_level(*this, "zoom-level", 1.0),
     parent(parent_)
 {
 
 }
 
-void ZoomHandler::set_zoom_level(float value)
+void ZoomHandler::set_zoom_level(double value)
 {
   using namespace std::placeholders;
 
-  gj_assert(value >= min_zoom and value <= max_zoom);
+  // clamp the zoom level
+  value = std::min(std::max(value, min_zoom),
+                   max_zoom);
+
+  //gj_assert(value >= min_zoom and value <= max_zoom);
 
   Gdk::Point pt = parent.get_scroll_handler().get_center_point();
   layout_pos = parent.get_layout().get_position(pt);
   Rectangle rect =
-    parent.get_scroll_handler().property_current_rectangle().get_value();
+    parent.get_scroll_handler()
+    .property_current_rectangle().get_value();
 
-  fx = (pt.get_x() - rect.get_x()) / float(rect.get_width());
-  fy = (pt.get_y() - rect.get_y()) / float(rect.get_height());
+  fx = (pt.get_x() - rect.get_x()) / double(rect.get_width());
+  fy = (pt.get_y() - rect.get_y()) / double(rect.get_height());
 
   LOG(DEBUG) << "ZoomHandler::set_zoom_level(" << value << ")";
 
@@ -38,7 +43,7 @@ void ZoomHandler::set_zoom_level(float value)
   prop_zoom_level = value;
 }
 
-float ZoomHandler::get_zoom_level() const
+double ZoomHandler::get_zoom_level() const
 {
   return prop_zoom_level.get_value();
 }
@@ -60,6 +65,28 @@ void ZoomHandler::zoom_fit_width()
 
 void ZoomHandler::zoom_fit_page()
 {
+  const ScrollHandler& handler =
+    parent.get_scroll_handler();
+
+  PageWidget* current_page_widget =
+    handler.property_current_page().get_value();
+
+  if(not(current_page_widget))
+    return;
+
+  Rectangle visible_rect =
+    handler.property_current_rectangle().get_value();
+
+  PageRef current_page =
+    current_page_widget->get_page();
+
+  double factor = std::min((visible_rect.get_width() - 2*page_margin) /
+                           double(current_page->get_width()),
+                           (visible_rect.get_height() - 2*page_margin) /
+                           double(current_page->get_height()));
+
+  set_zoom_level(factor);
+
   ///TODO: implement this
 }
 
