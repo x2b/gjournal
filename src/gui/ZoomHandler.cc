@@ -61,6 +61,38 @@ void ZoomHandler::zoom_out()
 void ZoomHandler::zoom_fit_width()
 {
   ///TODO: implement this
+
+  const double cur_val = get_zoom_level();
+
+  const ScrollHandler& handler =
+    parent.get_scroll_handler();
+
+  const Rectangle visible_rect =
+    handler.property_current_rectangle().get_value();
+
+
+  gj_assert(visible_rect.is_valid());
+
+  const int width = parent.get_layout().get_column_width();
+
+  const int target_width =
+    visible_rect.get_width() -2*page_margin;
+
+  if(not(parent.get_layout().property_dual().get_value()))
+  {
+    set_zoom_level(cur_val * target_width / double(width));
+  }
+  else
+  {
+    const int current_width =
+      parent.get_layout().get_allocated_width();
+
+    const double inc =
+      1 + (target_width - current_width)
+      / (2.0*width);
+
+    set_zoom_level(inc * cur_val);
+  }
 }
 
 void ZoomHandler::zoom_fit_page()
@@ -76,6 +108,8 @@ void ZoomHandler::zoom_fit_page()
 
   Rectangle visible_rect =
     handler.property_current_rectangle().get_value();
+
+  gj_assert(visible_rect.is_valid());
 
   PageRef current_page =
     current_page_widget->get_page();

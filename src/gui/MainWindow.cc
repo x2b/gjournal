@@ -49,7 +49,7 @@ void MainWindow::read_document(Glib::RefPtr<Gio::File> file)
 
   try
   {
-    doc = reader.read_from_file(file->get_uri()); 
+    doc = reader.read_from_file(file->get_uri());
   }
   catch(ReadError& e)
   {
@@ -59,7 +59,7 @@ void MainWindow::read_document(Glib::RefPtr<Gio::File> file)
 
     error_dlg.set_title("Read error");
 
-    error_dlg.run();    
+    error_dlg.run();
   }
 
   //JournalWidget* journal =

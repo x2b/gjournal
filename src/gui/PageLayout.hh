@@ -72,10 +72,15 @@ public:
   LayoutPosition get_position(const Gdk::Point& point) const;
 
   /**
-   * This functions performs the opposite of
+   * Performs the opposite of
    * get_position(const Gdk::Point& point) const
    */
   Gdk::Point get_point(LayoutPosition position) const;
+
+  /**
+   * Returns the width of a column in the PageLayout
+   */
+  int get_column_width() const;
 
 protected:
 

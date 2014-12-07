@@ -280,6 +280,26 @@ Gdk::Point PageLayout::get_point(LayoutPosition position) const
   return Gdk::Point(x, y);
 }
 
+int PageLayout::get_column_width() const
+{
+  int m = 0;
+
+  for(auto row : get_layout_rows())
+  {
+    const Gtk::Widget *first_child = nullptr,
+      *second_child = nullptr;
+
+    std::tie(first_child, second_child) = row;
+
+    if(first_child)
+      m = std::max(m, first_child->get_allocated_width());
+    if(second_child)
+      m = std::max(m, second_child->get_allocated_width());
+  }
+
+  return m;
+}
+
 bool PageLayout::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
   //Gtk::Allocation alloc = get_allocation();

@@ -21,12 +21,12 @@ private:
 
   void on_action_dual_activated();
   void on_action_odd_left_activated();
-  
+
   void create_menu();
 
   void add_menu(const Glib::ustring& menu_name,
                 const Glib::ustring& button_name);
-  
+
   Glib::RefPtr<Gtk::Builder> window_builder;
   Glib::RefPtr<Gio::SimpleAction> act_dual, act_odd_left;
 

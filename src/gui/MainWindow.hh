@@ -26,7 +26,7 @@ public:
 
   Glib::RefPtr<Gio::SimpleActionGroup> get_action_group();
   Glib::RefPtr<Gtk::Builder> get_builder();
-  
+
   DocumentHandler& get_document_handler();
 
   void read_document(Glib::RefPtr<Gio::File> file);

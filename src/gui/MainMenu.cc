@@ -20,7 +20,7 @@ MainMenu::MainMenu(MainWindow& window)
   main_window.get_document_handler()
     .property_active_journal().signal_changed()
     .connect(std::bind(&MainMenu::on_active_journal_changed, this));
-  
+
   create_menu();
 }
 
@@ -121,7 +121,7 @@ void MainMenu::add_menu(const Glib::ustring& menu_name,
 
 
 void MainMenu::on_action_dual_activated()
-{  
+{
   TRACE;
 
   if(not(current_journal))
@@ -132,7 +132,7 @@ void MainMenu::on_action_dual_activated()
   bool active = false;
   act_dual->get_state(active);
   act_dual->change_state(not(active));
-  
+
   active = not(active);
 
   current_journal->get_layout()
@@ -142,7 +142,7 @@ void MainMenu::on_action_dual_activated()
 }
 
 void MainMenu::on_action_odd_left_activated()
-{ 
+{
   TRACE;
 
   if(not(current_journal))
@@ -153,7 +153,7 @@ void MainMenu::on_action_odd_left_activated()
   bool active = false;
   act_odd_left->get_state(active);
   act_odd_left->change_state(not(active));
-  
+
   active = not(active);
 
   current_journal->get_layout()
