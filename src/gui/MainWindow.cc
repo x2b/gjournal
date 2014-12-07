@@ -2,16 +2,14 @@
 
 #include <giomm/menu.h>
 
-#include <gtkmm/filechooserdialog.h>
-#include <gtkmm/menubutton.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stack.h>
 
 #include "gui/JournalWidget.hh"
-#include "gui/PrintOperation.hh"
 
 #include "io/XojReader.hh"
 
+#include "util/Error.hh"
 #include "util/Log.hh"
 #include "util/ReadError.hh"
 
@@ -23,7 +21,8 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
     stack(nullptr),
     zoom_widget(nullptr),
     position_widget(nullptr),
-    drag_handler(*this)
+    drag_handler(*this),
+    main_menu(*this)
 {
   LOG(DEBUG) << "Created main window";
 
@@ -41,14 +40,27 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
   position_widget->set_window(this);
 
   zoom_widget->show_all();
-
-  create_menu();
 }
 
 void MainWindow::read_document(Glib::RefPtr<Gio::File> file)
 {
   XojReader reader;
-  DocumentRef doc = reader.read_from_file(file->get_uri());
+  DocumentRef doc;
+
+  try
+  {
+    doc = reader.read_from_file(file->get_uri()); 
+  }
+  catch(ReadError& e)
+  {
+    Gtk::MessageDialog error_dlg(*this, e.what(), false,
+                                 Gtk::MESSAGE_ERROR,
+                                 Gtk::BUTTONS_OK);
+
+    error_dlg.set_title("Read error");
+
+    error_dlg.run();    
+  }
 
   //JournalWidget* journal =
   get_document_handler().add_document(doc);
@@ -65,87 +77,9 @@ Glib::RefPtr<Gio::SimpleActionGroup> MainWindow::get_action_group()
   return group_win;
 }
 
-void MainWindow::create_menu()
+Glib::RefPtr<Gtk::Builder> MainWindow::get_builder()
 {
-  Glib::RefPtr<Glib::Object> obj =
-    window_builder->get_object("menu_actions");
-
-  Glib::RefPtr<Gio::Menu> menu =
-    Glib::RefPtr<Gio::Menu>::cast_dynamic(obj);
-
-  Gtk::MenuButton* gears_button = nullptr;
-
-  window_builder->get_widget("gears", gears_button);
-
-  gears_button->set_use_popover(false);
-  gears_button->set_menu_model(menu);
-
-
-  group_win->add_action_with_parameter("open",
-                                       std::bind(&MainWindow::on_open_action_activated,
-                                                 this));
-
-  group_win->add_action_with_parameter("print",
-                                       std::bind(&MainWindow::on_print_action_activated, this));
-}
-
-void MainWindow::on_open_action_activated()
-{
-  Glib::RefPtr<Gtk::FileFilter> filter
-    = Gtk::FileFilter::create();
-
-  filter->set_name("Xournal file");
-  filter->add_pattern("*.xoj");
-
-  Gtk::FileChooserDialog dlg(*this,
-                             Glib::ustring("Select File"));
-
-  dlg.add_filter(filter);
-
-  auto ok_button = dlg.add_button("Open", Gtk::RESPONSE_ACCEPT);
-  dlg.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-
-  ok_button->set_can_default();
-  ok_button->set_receives_default();
-  dlg.set_default(*ok_button);
-  dlg.set_select_multiple(false);
-
-  if(dlg.run() == Gtk::RESPONSE_ACCEPT)
-  {
-    try
-    {
-      read_document(dlg.get_file());
-    }
-    catch(ReadError& e)
-    {
-      dlg.hide();
-
-      Gtk::MessageDialog error_dlg(*this, e.what(), false,
-                                   Gtk::MESSAGE_ERROR,
-                                   Gtk::BUTTONS_OK);
-
-      error_dlg.set_title("Read error");
-
-      error_dlg.run();
-    }
-  }
-
-}
-
-void MainWindow::on_print_action_activated()
-{
-  TRACE;
-
-  JournalWidget* active_journal
-    = get_document_handler().property_active_journal().get_value();
-
-  if(not(active_journal))
-    return;
-
-  auto op =
-    PrintOperation::create(active_journal->get_document());
-
-  op->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, *this);
+  return window_builder;
 }
 
 MainWindow::~MainWindow()

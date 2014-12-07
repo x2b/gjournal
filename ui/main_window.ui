@@ -130,32 +130,33 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="search">
+          <object class="GtkMenuButton" id="file_button">
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
+            <property name="direction">none</property>
+            <property name="use-popover">False</property>
             <style>
               <class name="image-button"/>
             </style>
-            <child>
-              <object class="GtkImage" id="search_icon">
-                <property name="visible">True</property>
-                <property name="icon-name">edit-find-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
-          <object class="GtkMenuButton" id="gears">
+          <object class="GtkMenuButton" id="view_button">
             <property name="visible">True</property>
             <property name="direction">none</property>
-            <property name="use-popover">True</property>
+            <property name="use-popover">False</property>
             <style>
               <class name="image-button"/>
             </style>
+            <child>
+              <object class="GtkImage" id="file-icon">
+                <property name="visible">True</property>
+                <property name="icon-name">document-properties-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="pack-type">end</property>

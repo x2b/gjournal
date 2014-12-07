@@ -10,7 +10,8 @@
           <attribute name="action">win.zoom-fit-width</attribute>
     </item>
   </menu>
-  <menu id="menu_actions">
+  
+  <menu id="menu_file">
     <section>
       <item>
         <attribute name="label" translatable="yes">_Open…</attribute>
@@ -27,6 +28,19 @@
       <item>
         <attribute name="label" translatable="yes">_Print…</attribute>
         <attribute name="action">win.print</attribute>
+      </item>
+    </section>
+  </menu>
+  
+  <menu id="menu_view">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Dual</attribute>
+        <attribute name="action">win.dual</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Odd Pages Left</attribute>
+        <attribute name="action">win.odd-left</attribute>
       </item>
     </section>
   </menu>

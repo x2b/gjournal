@@ -8,6 +8,7 @@
 
 #include "gui/DocumentHandler.hh"
 #include "gui/DragHandler.hh"
+#include "gui/MainMenu.hh"
 #include "gui/PositionWidget.hh"
 #include "gui/ZoomHandler.hh"
 #include "gui/ZoomWidget.hh"
@@ -24,6 +25,8 @@ public:
              const Glib::RefPtr<Gtk::Builder>& ref_builder);
 
   Glib::RefPtr<Gio::SimpleActionGroup> get_action_group();
+  Glib::RefPtr<Gtk::Builder> get_builder();
+  
   DocumentHandler& get_document_handler();
 
   void read_document(Glib::RefPtr<Gio::File> file);
@@ -31,10 +34,6 @@ public:
   virtual ~MainWindow();
 
 private:
-  void create_menu();
-  void on_open_action_activated();
-  void on_print_action_activated();
-
   Glib::RefPtr<Gtk::Builder> window_builder;
   Glib::RefPtr<Gio::SimpleActionGroup> group_win;
   Gtk::Stack* stack;
@@ -42,6 +41,7 @@ private:
   PositionWidget* position_widget;
   DocumentHandler doc_handler;
   DragHandler drag_handler;
+  MainMenu main_menu;
 };
 
 #endif /* MAINWINDOW_HH */

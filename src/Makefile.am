@@ -6,6 +6,7 @@ gjournal_SOURCES = \
 	gui/DocumentHandler.cc \
 	gui/DragHandler.cc \
 	gui/JournalWidget.cc \
+	gui/MainMenu.cc \
 	gui/MainWindow.cc \
 	gui/PageLayout.cc \
 	gui/PageWidget.cc \

@@ -4,7 +4,7 @@
 
 PageLayout::PageLayout()
   : Glib::ObjectBase(typeid(PageLayout)),
-    prop_row_spacing(*this, "row-spacing", 10),
+    prop_row_spacing(*this, "row-spacing", 30),
     prop_col_spacing(*this, "col-spacing", 50),
     prop_dual(*this, "dual", false),
     prop_odd_left(*this, "odd-left", true)
