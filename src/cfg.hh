@@ -3,4 +3,6 @@
 
 #define GJOURNAL_DEBUG 1
 
+typedef unsigned int uint;
+
 #endif

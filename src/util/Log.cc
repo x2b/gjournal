@@ -1,6 +1,8 @@
 #include "Log.hh"
 
-#include "../cfg.hh"
+#include <cstdio>
+
+#include "cfg.hh"
 
 Log::Log()
 {
