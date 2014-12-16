@@ -2,18 +2,22 @@
 
 #include <gtkmm/stack.h>
 
+#include "gui/MainWindow.hh"
+
 #include "util/Error.hh"
+#include "util/Log.hh"
 
 DocumentHandler::DocumentHandler()
   : Glib::ObjectBase(typeid(DocumentHandler)),
     stack(nullptr),
+    main_window(nullptr),
     prop_active_journal(*this, "active-journal", nullptr)
 {
 
 }
 
 JournalWidget* DocumentHandler::add_document(DocumentRef doc,
-					     bool make_active)
+                                             bool make_active)
 {
   gj_assert(stack);
   gj_assert(doc);
@@ -53,7 +57,7 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc,
 
   if(make_active)
   {
-    stack->property_visible_child() = widget;
+    set_active_journal(widget);
   }
 
   return widget;
@@ -71,15 +75,14 @@ DocumentHandler::signal_document_removed()
   return sig_doc_removed;
 }
 
-void DocumentHandler::set_stack(Gtk::Stack* stack_)
+void DocumentHandler::setup(MainWindow* main_window_,
+                            Gtk::Stack* stack_)
 {
-  if(stack == stack_)
-    return;
-
+  main_window = main_window_;
   stack = stack_;
 
   auto func = std::bind(&DocumentHandler::on_visible_child_changed,
-			this);
+                        this);
 
   if(stack)
   {
@@ -90,6 +93,16 @@ void DocumentHandler::set_stack(Gtk::Stack* stack_)
   {
     stack_connection.disconnect();
   }
+
+  act_prev_journal =
+    main_window->add_action_with_parameter("prev-journal",
+                                           std::bind(&DocumentHandler::on_action_prev_journal_activated, this));
+
+  act_next_journal =
+    main_window->add_action_with_parameter("next-journal",
+                                           std::bind(&DocumentHandler::on_action_next_journal_activated, this));
+
+
 }
 
 void DocumentHandler::on_visible_child_changed()
@@ -98,13 +111,59 @@ void DocumentHandler::on_visible_child_changed()
 
   Gtk::Widget* widget = stack->property_visible_child().get_value();
 
-  for(auto journal : journals)
+  auto it = std::find(journals.begin(),
+                      journals.end(),
+                      widget);
+
+  if(it != journals.end())
   {
-    if(journal == widget)
-    {
-      prop_active_journal = journal;
-      break;
-    }
+    prop_active_journal = *it;
   }
 
+}
+
+void DocumentHandler::set_active_journal(JournalWidget* journal)
+{
+  gj_assert(stack);
+
+  prop_active_journal.set_value(journal);
+
+  stack->property_visible_child().set_value(journal);
+}
+
+void DocumentHandler::on_action_next_journal_activated()
+{
+  TRACE;
+
+  auto it = std::find(journals.begin(),
+                      journals.end(),
+                      property_active_journal().get_value());
+
+  if(it == journals.end())
+    return;
+
+  if(++it == journals.end())
+    it = journals.begin();
+
+  set_active_journal(*it);
+}
+
+void DocumentHandler::on_action_prev_journal_activated()
+{
+  TRACE;
+
+  auto it = std::find(journals.begin(),
+                      journals.end(),
+                      property_active_journal().get_value());
+
+  if(it == journals.end())
+    return;
+
+  if(it == journals.begin())
+    it = --journals.end();
+  else
+    --it;
+
+
+  set_active_journal(*it);
 }

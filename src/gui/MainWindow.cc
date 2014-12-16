@@ -17,7 +17,6 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
                        const Glib::RefPtr<Gtk::Builder>& ref_builder)
   : Gtk::ApplicationWindow(cobject),
     window_builder(ref_builder),
-    group_win(Gio::SimpleActionGroup::create()),
     stack(nullptr),
     zoom_widget(nullptr),
     position_widget(nullptr),
@@ -26,11 +25,9 @@ MainWindow::MainWindow(MainWindow::BaseObjectType* cobject,
 {
   LOG(DEBUG) << "Created main window";
 
-  insert_action_group("win", group_win);
-
   window_builder->get_widget("stack", stack);
 
-  doc_handler.set_stack(stack);
+  doc_handler.setup(this, stack);
 
   window_builder->get_widget_derived("zoom", zoom_widget);
   window_builder->get_widget_derived("position_widget",
@@ -70,11 +67,6 @@ void MainWindow::read_document(Glib::RefPtr<Gio::File> file)
 DocumentHandler& MainWindow::get_document_handler()
 {
   return doc_handler;
-}
-
-Glib::RefPtr<Gio::SimpleActionGroup> MainWindow::get_action_group()
-{
-  return group_win;
 }
 
 Glib::RefPtr<Gtk::Builder> MainWindow::get_builder()

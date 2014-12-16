@@ -86,29 +86,27 @@ void ZoomWidget::create_menu()
   menu->append_section("", level_section);
 }
 
-void ZoomWidget::set_window(MainWindow* window)
+void ZoomWidget::set_window(MainWindow* main_window_)
 {
-  gj_assert(window);
+  gj_assert(main_window_);
+
+  main_window = main_window_;
 
   using namespace std::placeholders;
-
-  auto group = window->get_action_group();
 
   auto act = Gio::SimpleAction::create("zoom",
                                        Glib::Variant<double>::variant_type());
 
   act->signal_activate().connect(std::bind(&ZoomWidget::on_zoom_action_activated, this, _1));
 
-  group->add_action(act);
+  main_window_->add_action(act);
 
-  group->add_action_with_parameter("zoom-fit-page", std::bind(&ZoomWidget::on_zoom_fit_page, this));
-  group->add_action_with_parameter("zoom-fit-width", std::bind(&ZoomWidget::on_zoom_fit_width, this));
+  main_window_->add_action_with_parameter("zoom-fit-page", std::bind(&ZoomWidget::on_zoom_fit_page, this));
+  main_window_->add_action_with_parameter("zoom-fit-width", std::bind(&ZoomWidget::on_zoom_fit_width, this));
 
   create_menu();
 
-  main_window = window;
-
-  window->get_document_handler()
+  main_window->get_document_handler()
     .property_active_journal().signal_changed()
     .connect(std::bind(&ZoomWidget::on_active_journal_changed, this));
 }

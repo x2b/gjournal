@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
   Glib::RefPtr<Application> app =
-    Application::create(argc, argv, "org.gnome.gjournal");
+    Application::create();
 
-  return app->run();
+  return app->run(argc, argv);
 }

@@ -24,7 +24,6 @@ public:
   MainWindow(BaseObjectType* cobject,
              const Glib::RefPtr<Gtk::Builder>& ref_builder);
 
-  Glib::RefPtr<Gio::SimpleActionGroup> get_action_group();
   Glib::RefPtr<Gtk::Builder> get_builder();
 
   DocumentHandler& get_document_handler();
@@ -35,7 +34,6 @@ public:
 
 private:
   Glib::RefPtr<Gtk::Builder> window_builder;
-  Glib::RefPtr<Gio::SimpleActionGroup> group_win;
   Gtk::Stack* stack;
   ZoomWidget* zoom_widget;
   PositionWidget* position_widget;

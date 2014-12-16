@@ -77,26 +77,24 @@ void MainMenu::create_menu()
   add_menu("menu_file", "file_button");
   add_menu("menu_view", "view_button");
 
-  auto group_win = main_window.get_action_group();
+  main_window.add_action_with_parameter("open",
+                                        std::bind(&MainMenu::on_open_action_activated,
+                                                  this));
 
-  group_win->add_action_with_parameter("open",
-                                       std::bind(&MainMenu::on_open_action_activated,
-                                                 this));
-
-  group_win->add_action_with_parameter("print",
-                                       std::bind(&MainMenu::on_print_action_activated, this));
+  main_window.add_action_with_parameter("print",
+                                        std::bind(&MainMenu::on_print_action_activated, this));
 
   act_dual =
-    group_win->add_action_bool("dual",
-                               std::bind(&MainMenu::on_action_dual_activated,
-                                         this),
-                               false);
+    main_window.add_action_bool("dual",
+                                std::bind(&MainMenu::on_action_dual_activated,
+                                          this),
+                                false);
 
   act_odd_left =
-    group_win->add_action_bool("odd-left",
-                               std::bind(&MainMenu::on_action_odd_left_activated,
-                                         this),
-                               false);
+    main_window.add_action_bool("odd-left",
+                                std::bind(&MainMenu::on_action_odd_left_activated,
+                                          this),
+                                false);
 }
 
 void MainMenu::add_menu(const Glib::ustring& menu_name,
@@ -183,4 +181,3 @@ void MainMenu::on_active_journal_changed()
   act_odd_left->change_state(current_journal->get_layout()
                              .property_odd_left().get_value());
 }
-

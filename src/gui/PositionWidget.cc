@@ -47,16 +47,14 @@ void PositionWidget::set_window(MainWindow* window)
 
   main_window = window;
 
-  auto group = window->get_action_group();
-
  act_next =
-    group->add_action_with_parameter("next-page",
-                                     std::bind(&PositionWidget::on_next_page_activated,
+    main_window->add_action_with_parameter("next-page",
+                                           std::bind(&PositionWidget::on_next_page_activated,
                                                this));
 
   act_prev =
-    group->add_action_with_parameter("prev-page",
-                                     std::bind(&PositionWidget::on_prev_page_activated,
+    main_window->add_action_with_parameter("prev-page",
+                                           std::bind(&PositionWidget::on_prev_page_activated,
                                                this));
 
   window->get_document_handler()

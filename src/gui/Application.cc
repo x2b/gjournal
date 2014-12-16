@@ -9,25 +9,16 @@
 #include "util/Error.hh"
 #include "util/Log.hh"
 
-Application::Application(int& argc,
-                         char**& argv,
-                         const Glib::ustring& application_id,
-                         Gio::ApplicationFlags flags)
-  : Gtk::Application(argc, argv, application_id, flags),
+Application::Application()
+  : Gtk::Application("org.gnome.gjournal"),
     window(nullptr)
 {
   set_flags(Gio::APPLICATION_HANDLES_OPEN);
 }
 
-Glib::RefPtr<Application> Application::create(int& argc,
-                                              char**& argv,
-                                              const Glib::ustring& application_id,
-                                              Gio::ApplicationFlags flags)
+Glib::RefPtr<Application> Application::create()
 {
-  return Glib::RefPtr<Application>(new Application(argc,
-                                                   argv,
-                                                   application_id,
-                                                   flags));
+  return Glib::RefPtr<Application>(new Application());
 }
 
 void Application::on_startup()
@@ -97,7 +88,21 @@ void Application::on_startup()
   act_quit->signal_activate().connect(std::bind(&Application::on_quit,
                                                 this));
 
+  window->show_all();
+
   add_action(act_quit);
+
+  const std::map<std::string, std::string>
+    accels({{"win.open", "<Primary>o"},
+        {"win.print", "<Primary>p"},
+        {"win.next-journal", "<Primary>Tab"},
+        {"win.prev-journal", "<Shift><Primary>Tab"},
+        {"app.quit", "<Primary>q"}});
+
+  for(auto& accel : accels)
+  {
+    set_accel_for_action(accel.first, accel.second);
+  }
 }
 
 void Application::on_activate()

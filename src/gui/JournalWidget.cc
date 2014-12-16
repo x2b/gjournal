@@ -28,7 +28,7 @@ JournalWidget::JournalWidget(DocumentRef doc_)
     page_layout.add(*widget);
     pages.push_back(widget);
   }
-  
+
   page_layout.set_margin_top(30);
   page_layout.set_margin_bottom(30);
 }
