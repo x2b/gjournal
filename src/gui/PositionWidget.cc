@@ -157,6 +157,7 @@ void PositionWidget::update()
 
     no_pages_entry->set_text(no_pages_string);
     no_pages_entry->set_max_width_chars(no_pages_string.size());
+    no_pages_entry->set_width_chars(no_pages_string.size());
     page_entry->set_max_width_chars(n);
     page_entry->set_max_length(n);
   }
