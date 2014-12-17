@@ -34,6 +34,7 @@ ADD_EXECUTABLE(gjournal
                ./model/Color.cc
                ./model/PressurePoint.cc
                ./model/Document.cc
+               ./model/Image.cc
                ./model/Text.cc
                ./model/Layer.cc
                ./model/Pen.cc

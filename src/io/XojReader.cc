@@ -3,9 +3,11 @@
 #include <string>
 #include <unordered_map>
 
+#include <glibmm/base64.h>
 #include <glibmm/convert.h>
 
 #include "model/Color.hh"
+#include "model/Image.hh"
 #include "model/Pen.hh"
 #include "model/PressureStroke.hh"
 #include "model/Stroke.hh"
@@ -217,6 +219,28 @@ ElementRef XojReader::parse_element(const xmlpp::Node* node)
     text->set_color(parse_color(color_name));
 
     return text;
+  }
+  else if(name == "image")
+  {
+    Glib::ustring top_name = element->get_attribute_value("top"),
+      bottom_name = element->get_attribute_value("bottom"),
+      left_name = element->get_attribute_value("left"),
+      right_name = element->get_attribute_value("right");
+
+    double top = std::stod(top_name),
+      bottom = std::stod(bottom_name),
+      left = std::stod(left_name),
+      right = std::stod(right_name);
+
+    Rectangle position(left, top, right - left, bottom - top);
+
+    const xmlpp::TextNode* data_element =
+      element->get_child_text();
+
+    std::string data
+      = Glib::Base64::decode(data_element->get_content());
+
+    return Image::create(position, data);
   }
 
   return nullptr;
