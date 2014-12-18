@@ -57,7 +57,10 @@ void MainWindow::read_document(Glib::RefPtr<Gio::File> file)
     error_dlg.set_title("Read error");
 
     error_dlg.run();
+    return;
   }
+
+  Gtk::RecentManager::get_default()->add_item(file->get_uri());
 
   //JournalWidget* journal =
   get_document_handler().add_document(doc);

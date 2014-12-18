@@ -15,7 +15,7 @@ private:
 public:
   virtual void draw(const Cairo::RefPtr<Cairo::Context>& cr)
     const override;
-  
+
   virtual Rectangle bounding_rect() const override;
 
   virtual void move(Point& offset) override;

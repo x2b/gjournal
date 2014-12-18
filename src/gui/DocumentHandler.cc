@@ -60,6 +60,8 @@ JournalWidget* DocumentHandler::add_document(DocumentRef doc,
     set_active_journal(widget);
   }
 
+  act_close_journal->set_enabled(journals.size() > 0);
+
   return widget;
 }
 
@@ -95,14 +97,60 @@ void DocumentHandler::setup(MainWindow* main_window_,
   }
 
   act_prev_journal =
-    main_window->add_action_with_parameter("prev-journal",
-                                           std::bind(&DocumentHandler::on_action_prev_journal_activated, this));
+    main_window->add_action_with_parameter(
+      "prev-journal",
+      std::bind(&DocumentHandler::on_action_prev_journal_activated,
+                this));
 
   act_next_journal =
-    main_window->add_action_with_parameter("next-journal",
-                                           std::bind(&DocumentHandler::on_action_next_journal_activated, this));
+    main_window->add_action_with_parameter(
+      "next-journal",
+      std::bind(&DocumentHandler::on_action_next_journal_activated,
+                this));
 
+  act_close_journal =
+    main_window->add_action_with_parameter(
+      "close-current-journal",
+      std::bind(&DocumentHandler::on_action_close_current_journal_activated,
+                this));
 
+}
+
+void DocumentHandler::on_action_close_current_journal_activated()
+{
+  TRACE;
+
+  gj_assert(stack);
+
+  auto it = std::find(journals.begin(),
+                      journals.end(),
+                      property_active_journal().get_value());
+
+  if(it == journals.end())
+    return;
+
+  JournalWidget* widget =
+    property_active_journal().get_value();
+
+  signal_document_removed().emit(widget);
+
+  stack->remove(*widget);
+
+  journals.erase(it);
+
+  for(auto v : journals_by_uri)
+  {
+    if(v.second == widget)
+    {
+      journals_by_uri.erase(v.first);
+      break;
+    }
+  }
+
+  if(journals.size() == 0)
+    set_active_journal(nullptr);
+
+  act_close_journal->set_enabled(journals.size() > 0);
 }
 
 void DocumentHandler::on_visible_child_changed()
@@ -119,7 +167,6 @@ void DocumentHandler::on_visible_child_changed()
   {
     prop_active_journal = *it;
   }
-
 }
 
 void DocumentHandler::set_active_journal(JournalWidget* journal)

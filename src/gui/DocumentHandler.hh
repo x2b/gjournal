@@ -33,7 +33,6 @@ public:
 
   type_signal_document signal_document_added();
   type_signal_document signal_document_removed();
-  type_signal_document signal_document_activated();
 
   void setup(MainWindow* main_window_,
              Gtk::Stack* stack_);
@@ -49,6 +48,7 @@ private:
 
   void on_action_next_journal_activated();
   void on_action_prev_journal_activated();
+  void on_action_close_current_journal_activated();
 
   Gtk::Stack* stack;
   MainWindow* main_window;
@@ -62,7 +62,7 @@ private:
   Glib::Property<JournalWidget*> prop_active_journal;
 
   Glib::RefPtr<Gio::SimpleAction> act_next_journal,
-    act_prev_journal;
+    act_prev_journal, act_close_journal;
 
   type_signal_document sig_doc_added,
     sig_doc_removed;

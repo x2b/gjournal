@@ -122,14 +122,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkVBox" id="zoom">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkMenuButton" id="file_button">
             <property name="visible">True</property>
             <property name="direction">none</property>
@@ -157,6 +149,14 @@
                 <property name="icon-size">1</property>
               </object>
             </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVBox" id="zoom">
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="pack-type">end</property>

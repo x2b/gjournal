@@ -97,6 +97,7 @@ void Application::on_startup()
         {"win.print", "<Primary>p"},
         {"win.next-journal", "<Primary>Tab"},
         {"win.prev-journal", "<Shift><Primary>Tab"},
+        {"win.close-current-journal", "<Primary>w"},
         {"app.quit", "<Primary>q"}});
 
   for(auto& accel : accels)

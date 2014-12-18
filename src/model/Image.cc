@@ -23,10 +23,10 @@ Image::Image(Rectangle position_, const std::string& data_str)
       data[i] = data_str[read_pos];
     }
 
-    
+
     return CAIRO_STATUS_SUCCESS;
   };
-  
+
   surface = Cairo::ImageSurface::create_from_png_stream(func);
 }
 
@@ -51,7 +51,7 @@ Rectangle Image::bounding_rect() const
 
 void Image::move(Point& offset)
 {
-  
+
 }
 
 void Image::scale(Point& src, double dx, double dy)

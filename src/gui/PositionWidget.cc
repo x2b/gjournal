@@ -105,9 +105,12 @@ void PositionWidget::on_active_journal_changed()
     main_window->get_document_handler()
     .property_active_journal().get_value();
 
-  gj_assert(journal);
+  set_visible(!!(journal));
 
   active_journal = journal;
+
+  if(not(active_journal))
+    return;
 
   auto func = std::bind(&PositionWidget::on_current_page_changed,
                         this);

@@ -119,9 +119,9 @@ void ZoomWidget::on_active_journal_changed()
     main_window->get_document_handler()
     .property_active_journal().get_value();
 
-  gj_assert(journal);
+  set_visible(!!(journal));
 
-  set_handler(&(journal->get_zoom_handler()));
+  set_handler(journal ? &(journal->get_zoom_handler()) : nullptr);
 }
 
 void ZoomWidget::set_handler(ZoomHandler* handler_)
@@ -198,5 +198,10 @@ void ZoomWidget::set_label()
   // points are displayed
   val = int(val * 100) / 100.0f;
 
-  entry.set_text(Glib::ustring::compose("%1%%", val));
+  entry.set_text(Glib::ustring::compose("%1 %%", val));
+
+  int l = Glib::ustring("100.00 %").size();
+
+  entry.set_max_width_chars(l + 3);
+  entry.set_width_chars(l + 3);
 }
