@@ -7,6 +7,9 @@ class Image;
 
 typedef std::shared_ptr<Image> ImageRef;
 
+/**
+ * @brief An Element an embedded image
+ */
 class Image : public Element
 {
 private:
@@ -21,6 +24,12 @@ public:
   virtual void move(Point& offset) override;
   virtual void scale(Point& src, double dx, double dy) override;
 
+  /**
+   * Creates a new Image.
+   *
+   * @param position The position
+   * @param data     The raw binary data (a PNG stream)
+   */
   static ImageRef create(Rectangle position,
                          const std::string& data);
 

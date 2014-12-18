@@ -5,12 +5,20 @@
 
 #include "model/Document.hh"
 
+/**
+ * @brief Reads a Document from XML files
+ */
 class XojReader
 {
 public:
   XojReader();
   virtual ~XojReader();
 
+  /**
+   * Reads a Document
+   *
+   * @param filename The name of the file to be used.
+   */
   DocumentRef read_from_file(const Glib::ustring& filename);
 
 private:
@@ -21,7 +29,7 @@ private:
   Color parse_color(Glib::ustring& color_name);
 
   void parse_background(const xmlpp::Node* node,
-			PageRef page);
+                        PageRef page);
 
   std::vector<double> parse_list(Glib::ustring str);
 };

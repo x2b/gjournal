@@ -8,6 +8,9 @@
 
 #include "Color.hh"
 
+/**
+ * @brief A Pen with a specified width and Color
+ */
 class Pen
 {
 public:

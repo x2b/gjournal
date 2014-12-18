@@ -20,8 +20,12 @@ class Stroke;
 
 typedef std::shared_ptr<Stroke> StrokeRef;
 
+
+/**
+ * @brief A Stroke of constant width
+ */
 class Stroke : public Element,
-	       public StrokeBase<Point>
+               public StrokeBase<Point>
 {
 private:
   Stroke(Pen pen_);
@@ -34,6 +38,9 @@ public:
   virtual void move(Point& offset) override;
   virtual void scale(Point& src, double dx, double dy) override;
 
+  /**
+   * Creates a new Stroke
+   */
   static StrokeRef create(Pen pen_);
 };
 

@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+/**
+ * @brief A Point stored using double precision.
+ */
 class Point
 {
 public:
@@ -21,6 +24,6 @@ private:
 
 
 std::ostream& operator<<(std::ostream& stream,
-			 const Point& point);
+                         const Point& point);
 
 #endif /* POINT_HH */

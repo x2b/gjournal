@@ -5,6 +5,11 @@
 
 #include "Pen.hh"
 
+/**
+ * @brief A container for points with an associated Pen.
+ *
+ * @tparam The point type
+ */
 template <typename P>
 class StrokeBase
 {

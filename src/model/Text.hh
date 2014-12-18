@@ -13,6 +13,9 @@ class Text;
 
 typedef std::shared_ptr<Text> TextRef;
 
+/**
+ * @brief An Element containing text
+ */
 class Text : public Element
 {
 public:
@@ -24,9 +27,20 @@ public:
 
   virtual ~Text();
 
+  /**
+   * Sets this Element%'s Color to the specified value
+   */
   void set_color(Color c);
 
-  static TextRef create(const Glib::ustring& text_,
+  /**
+   * Creates a new Text
+   *
+   * @param text_     The actual text
+   * @param font_desc A string used to construct a Pango::FontDescription
+   * @param font_size The font size
+   * @param point_    The top left corner of the Element
+   */
+  static TextRef create(const Glib::ustring& text,
                         const Glib::ustring& font_desc,
                         const double& font_size,
                         const Point& point_);
