@@ -9,6 +9,7 @@
 
 #include <cairomm/cairomm.h>
 
+#include "Background.hh"
 #include "Color.hh"
 #include "Layer.hh"
 
@@ -39,20 +40,6 @@ public:
    */
   void draw(const Cairo::RefPtr<Cairo::Context>& cr) const;
 
-  /**
-   * The background type of a page.
-   */
-  enum class BackgroundType
-  {
-    NONE,
-    ///< A plain background
-    LINED,
-    ///< A lined paper
-    RULED,
-    ///< Almost a lined paper
-    GRAPH
-    ///< A graph paper
-  };
 
   /**
    * Adds a new Layer to this Page
@@ -79,32 +66,17 @@ public:
    */
   void set_number(int number);
 
-  /**
-   * Sets this Page%'s background color
-   */
-  void set_background_color(Color c);
-
-  /**
-   * Sets this Page%'s background type
-   */
-  void set_background_type(BackgroundType bg_type_);
+  Background& get_background();
+  const Background& get_background() const;
 
 private:
   Page(double width, double height, int number = -1);
 
-  void draw_background(const Cairo::RefPtr<Cairo::Context>& cr) const;
-
-  void draw_background_ruled(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  void draw_background_lined(const Cairo::RefPtr<Cairo::Context>& cr) const;
-  void draw_background_graph(const Cairo::RefPtr<Cairo::Context>& cr) const;
-
   double width, height;
   int number;
-  Color background_color;
-
-  BackgroundType bg_type;
 
   std::list<LayerRef> layers;
+  Background background;
 };
 
 #endif

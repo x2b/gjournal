@@ -30,19 +30,21 @@ ADD_EXECUTABLE(gjournal
                ./gui/PrintOperation.cc
                ./gui/JournalWidget.cc
                ./gui/PositionWidget.cc
-               ./model/PressureStroke.cc
+               ./gui/SurfaceBuffer.cc
+               ./model/Background.cc
                ./model/Color.cc
-               ./model/PressurePoint.cc
                ./model/Document.cc
-               ./model/Image.cc
-               ./model/Text.cc
-               ./model/Layer.cc
-               ./model/Pen.cc
-               ./model/Stroke.cc
                ./model/Element.cc
-               ./model/Rectangle.cc
-               ./model/Point.cc
+               ./model/Image.cc
+               ./model/Layer.cc
                ./model/Page.cc
+               ./model/Pen.cc
+               ./model/Point.cc
+               ./model/PressurePoint.cc
+               ./model/PressureStroke.cc
+               ./model/Rectangle.cc
+               ./model/Stroke.cc
+               ./model/Text.cc
                ./main.cc
                ./io/XojReader.cc)
 

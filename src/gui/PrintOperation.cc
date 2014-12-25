@@ -35,16 +35,7 @@ void PrintOperation::on_draw_page(const Glib::RefPtr<Gtk::PrintContext>& context
   const double cr_width = context->get_width(),
     cr_height = context->get_height();
 
-  PageList& pages = doc->get_pages();
-  PageRef current_page;
-
-  for(PageRef page : pages)
-  {
-    if(page->get_number() == page_no)
-    {
-      current_page = page;
-    }
-  }
+  PageRef current_page = doc->find(page_no);
 
   if(not(current_page))
     return;

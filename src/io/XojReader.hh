@@ -31,7 +31,12 @@ private:
   void parse_background(const xmlpp::Node* node,
                         PageRef page);
 
+  void parse_pixmap_background(const xmlpp::Element* element,
+                               PageRef page);
+
   std::vector<double> parse_list(Glib::ustring str);
+
+  DocumentRef current_document;
 };
 
 #endif /* XOJREADER_HH */

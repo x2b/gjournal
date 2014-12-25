@@ -3,6 +3,8 @@
 
 #include <gtkmm/drawingarea.h>
 
+#include "gui/SurfaceBuffer.hh"
+
 #include "model/Page.hh"
 
 class JournalWidget;
@@ -27,6 +29,7 @@ protected:
 
 private:
   PageRef page;
+  SurfaceBuffer buffer;
   JournalWidget* parent;
 };
 

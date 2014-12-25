@@ -64,9 +64,9 @@ void Application::on_startup()
                                     1);
 
     if(i == 0)
-      page->set_background_type(Page::BackgroundType::LINED);
+      page->get_background().set_style(Background::LINED);
     else
-      page->set_background_type(Page::BackgroundType::RULED);
+      page->get_background().set_style(Background::RULED);
 
     for(int i = 0; i < 10; ++i)
     {

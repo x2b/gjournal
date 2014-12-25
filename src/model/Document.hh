@@ -1,14 +1,14 @@
 #ifndef DOCUMENT_HH
 #define DOCUMENT_HH
 
-#include <list>
 #include <memory>
+#include <unordered_map>
+
+#include <boost/range/adaptor/map.hpp>
 
 #include <glibmm/ustring.h>
 
 #include "Page.hh"
-
-typedef std::list<PageRef> PageList;
 
 class Document;
 
@@ -38,11 +38,6 @@ public:
    * Removes the specified Page from this Document.
    */
   void remove_page(PageRef page);
-
-  /**
-   * Returns a list of Page%s.
-   */
-  PageList& get_pages();
 
   /**
    * Returns the number of Page%s in this Document.
@@ -76,16 +71,29 @@ public:
     uri = name;
   }
 
+  std::unordered_map<int, PageRef> pages;
+
   /**
    * Creates a new Document.
    */
   static DocumentRef create();
 
+  typedef decltype(pages
+                   | boost::adaptors::map_values) PageList;
+
+  /**
+   * Returns a list of Page%s.
+   */
+  PageList get_pages();
+
+  PageRef find(int number);
+
 private:
   Document();
-  PageList pages;
 
   Glib::ustring uri;
 };
+
+typedef Document::PageList PageList;
 
 #endif

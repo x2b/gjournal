@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <giomm/file.h>
+
 #include <glibmm/base64.h>
 #include <glibmm/convert.h>
 
@@ -13,6 +15,7 @@
 #include "model/Stroke.hh"
 #include "model/Text.hh"
 
+#include "util/Error.hh"
 #include "util/Log.hh"
 #include "util/ReadError.hh"
 
@@ -23,9 +26,9 @@ XojReader::XojReader()
 
 DocumentRef XojReader::read_from_file(const Glib::ustring& filename)
 {
-  DocumentRef doc = Document::create();
+  current_document = Document::create();
 
-  doc->set_uri(filename);
+  current_document->set_uri(filename);
 
 
   LOG(INFO) << "Reading file \"" << filename << "\"";
@@ -39,11 +42,15 @@ DocumentRef XojReader::read_from_file(const Glib::ustring& filename)
 
   for(const xmlpp::Node* page_node : root->find("/xournal/page"))
   {
-    doc->append_page(parse_page(page_node));
+    current_document->append_page(parse_page(page_node));
   }
 
   LOG(INFO) << "Read in a document with "
-	    << doc->count_pages() << " pages";
+	    << current_document->count_pages() << " pages";
+
+  auto doc = current_document;
+
+  current_document.reset();
 
   return doc;
 }
@@ -76,6 +83,48 @@ PageRef XojReader::parse_page(const xmlpp::Node* node)
   return page;
 }
 
+void XojReader::parse_pixmap_background(const xmlpp::Element* element,
+                                        PageRef page)
+{
+  Glib::ustring
+    domain = element->get_attribute_value("domain"),
+    filename = element->get_attribute_value("filename");
+
+  gj_assert(page);
+
+  Background& background = page->get_background();
+
+  background.set_type(Background::IMAGE);
+
+  Glib::RefPtr<Gdk::Pixbuf> background_image;
+
+  if(domain == "absolute")
+  {
+    background_image =
+      Gdk::Pixbuf::create_from_file(filename);
+  }
+  else if(domain == "attach")
+  {
+    auto file =
+      Gio::File::create_for_uri(current_document->get_uri()
+                                + "." + filename);
+
+    std::string path = file->get_path();
+
+    background_image =
+      Gdk::Pixbuf::create_from_file(path);
+  }
+  else if(domain == "clone")
+  {
+    PageRef page = current_document->find(std::stoi(filename));
+
+    if(page)
+      background_image = page->get_background().get_image();
+  }
+
+  background.set_image(background_image);
+}
+
 void XojReader::parse_background(const xmlpp::Node* page_node,
 				 PageRef page)
 {
@@ -88,30 +137,43 @@ void XojReader::parse_background(const xmlpp::Node* page_node,
   if(not(background_element))
     return;
 
+  Background& background = page->get_background();
+
   Glib::ustring
     style_name = background_element->get_attribute_value("style"),
-    color_name = background_element->get_attribute_value("color");
+    color_name = background_element->get_attribute_value("color"),
+    type_name = background_element->get_attribute_value("type");
 
-  page->set_background_color(parse_color(color_name));
 
-  const std::unordered_map<std::string, Page::BackgroundType>
-    known_bg_types({{"plain", Page::BackgroundType::NONE},
-	{"lined", Page::BackgroundType::LINED},
-	{"ruled", Page::BackgroundType::RULED},
-	{"graph", Page::BackgroundType::GRAPH},});
-
-  auto it = known_bg_types.find(style_name);
-
-  if(it != known_bg_types.end())
+  if(type_name == "solid")
   {
-    page->set_background_type(it->second);
+
+    background.set_color(parse_color(color_name));
+
+    const std::unordered_map<std::string, Background::BackgroundStyle>
+      known_bg_styles({{"plain", Background::NONE},
+                       {"lined", Background::LINED},
+                       {"ruled", Background::RULED},
+                       {"graph", Background::GRAPH}});
+
+    auto it = known_bg_styles.find(style_name);
+
+    if(it != known_bg_styles.end())
+    {
+      background.set_style(it->second);
+    }
+    else
+    {
+      background.set_style(Background::NONE);
+      LOG(ERROR) << "Could not find background type "
+                 << style_name;
+    }
   }
-  else
+  else if(type_name == "pixmap")
   {
-    page->set_background_type(Page::BackgroundType::NONE);
-    LOG(ERROR) << "Could not find background type "
-	       << style_name;
+    parse_pixmap_background(background_element, page);
   }
+
 
 }
 

@@ -1,41 +1,58 @@
 #include "Document.hh"
 
+#include "util/Error.hh"
+
 void Document::append_page(PageRef page)
 {
-  page->set_number(pages.size());
-  pages.push_back(page);
+  int number = pages.size();
+
+  page->set_number(number);
+
+  pages.insert(std::make_pair(number, page));
 }
 
 void Document::remove_page(PageRef page)
 {
-  auto it = get_pages().begin();
+  auto it = pages.begin();
   int i = 1;
   bool seen = false;
 
-  for(;it != get_pages().end(); ++i, ++it)
+  gj_assert(page);
+
+  for(;it != pages.end(); ++i, ++it)
   {
-    if(page == *it)
+    if(page == it->second)
     {
-      it = get_pages().erase(it);
+      it = pages.erase(it);
       seen = true;
     }
     else if(seen)
     {
-      (*it)->set_number(i);
+      it->second->set_number(i);
     }
   }
 
 };
 
-PageList& Document::get_pages()
+PageRef Document::find(int number)
 {
-  return pages;
+  auto it = pages.find(number);
+
+  if(it != pages.end())
+    return it->second;
+
+  return PageRef();
+}
+
+
+PageList Document::get_pages()
+{
+  return pages | boost::adaptors::map_values;
 };
 
 DocumentRef Document::create()
 {
-  Document* doc = new Document();
-  return DocumentRef(doc);
+  return DocumentRef(new Document());
 }
 
 Document::Document()
