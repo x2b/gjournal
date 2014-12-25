@@ -1,13 +1,16 @@
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 
 INCLUDE_DIRECTORIES(${GTKMM3_INCLUDE_DIRS}
-                    ${LIBXML_INCLUDE_DIRS})
+                    ${LIBXML_INCLUDE_DIRS}
+                    ${Boost_INCLUDE_DIRS})
 
 ADD_DEFINITIONS(${GTKMM3_CFLAGS}
-                ${LIBXML_CFLAGS})
+                ${LIBXML_CFLAGS}
+                ${Boost_CFLAGS})
 
 LINK_DIRECTORIES(${GTKMM3_LIBRARY_DIRS}
-                 ${LIBXML_LIBRARY_DIRS})
+                 ${LIBXML_LIBRARY_DIRS}
+                 ${Boost_LIBRARY_DIRS})
 
 GRESOURCE(${CMAKE_SOURCE_DIR} gjournal.gresource.xml
   "${CMAKE_BINARY_DIR}/src" RESOURCE_FILE)
