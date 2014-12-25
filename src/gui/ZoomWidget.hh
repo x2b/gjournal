@@ -1,10 +1,7 @@
 #ifndef ZOOMWIDGET_HH
 #define ZOOMWIDGET_HH
 
-#include <giomm/simpleactiongroup.h>
 #include <giomm/menu.h>
-#include <giomm/actionmap.h>
-#include <giomm/application.h>
 
 #include <gtkmm/hvbox.h>
 #include <gtkmm/entry.h>
