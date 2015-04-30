@@ -14,6 +14,8 @@ JournalWidget::JournalWidget(DocumentRef doc_)
   viewport = Gtk::manage(new Gtk::Viewport(get_hadjustment(),
                                            get_vadjustment()));
 
+  add_events(Gdk::SMOOTH_SCROLL_MASK);
+
   viewport->set_hadjustment(get_hadjustment());
   viewport->set_vadjustment(get_vadjustment());
 
@@ -105,6 +107,24 @@ bool JournalWidget::on_scroll_event(GdkEventScroll* event)
     else if(event->direction == GDK_SCROLL_DOWN)
     {
       zoom_handler.zoom_out();
+    }
+    else if(event->direction == GDK_SCROLL_SMOOTH)
+    {
+      gdouble delta_x = 0, delta_y = 0;
+      gdk_event_get_scroll_deltas((GdkEvent*) event,
+                                  &delta_x, &delta_y);
+
+      LOG(DEBUG) << "Smooth scroll with delta_x = " << delta_x
+                 << ", delta_y = " << delta_y;
+
+      if(delta_y < 0)
+      {
+        zoom_handler.zoom_in();
+      }
+      else if(delta_y > 0)
+      {
+        zoom_handler.zoom_out();
+      }
     }
     else
     {
